@@ -6,40 +6,40 @@ It contains programs on the following topics:
 
 ## Data Structures
 
-* [array](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/array)
-* [string](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/string)
-* [linked list](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/linked_list)
-* [binary tree](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/binary_tree)
-* [binary search tree](https://github.com/charulagrl/data-structures-and-algorithms/tree/master/binary_search_tree)
-* [graphs](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/graph)
+* [array](/array)
+* [string](/string)
+* [linked list](/linked_list)
+* [binary tree](/binary_tree)
+* [binary search tree](/binary_search_tree)
+* [graphs](/graph)
 
 ## Algorithms
 
-* [searching](https://github.com/charulagrl/data-structures-and-algorithms/tree/master/searching)
-	* [binary search](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/searching/binary_search.py)
-	* [ternary search](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/searching/ternary_search.py)
-* [sorting](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/sorting)
-	* [bubble sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/bubble_sort.py)
-	* [insertion sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/insertion_sort.py)
-	* [selection sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/selection_sort.py)
-	* [merge sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/merge_sort.py)
-	* [quick sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/quick_sort.py)
-	* [heap sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/heap_sort.py)
-	* [bucket sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/bucket_sort.py)
-	* [counting sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/counting_sort.py)
-	* [radix sort](https://github.com/charulagrl/data-structures-and-algorithms/blob/master/sorting/radix_sort.py)
-* [dynamic programming](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/dynamic_programming)
-* [backtrack](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/backtrack)
+* [searching](/searching)
+	* [binary search](/searching/binary_search.py)
+	* [ternary search](/searching/ternary_search.py)
+* [sorting](/sorting)
+	* [bubble sort](/sorting/bubble_sort.py)
+	* [insertion sort](/sorting/insertion_sort.py)
+	* [selection sort](/sorting/selection_sort.py)
+	* [merge sort](/sorting/merge_sort.py)
+	* [quick sort](/sorting/quick_sort.py)
+	* [heap sort](/sorting/heap_sort.py)
+	* [bucket sort](/sorting/bucket_sort.py)
+	* [counting sort](/sorting/counting_sort.py)
+	* [radix sort](/sorting/radix_sort.py)
+* [dynamic programming](/dynamic_programming)
+* [backtrack](/backtrack)
 
 ## Cracking the Coding Interview
 
 It contains:
 
-* Chapter wise [solution](https://github.com/charulagrl/data-structures-and-algorithms/tree/master/cracking_the_coding_interview) to questions in the book [Cracking the Coding Interview](https://www.amazon.com/dp/0984782850/ref=pd_lpo_sbs_dp_ss_1?pf_rd_p=1944687622&pf_rd_s=lpo-top-stripe-1&pf_rd_t=201&pf_rd_i=098478280X&pf_rd_m=ATVPDKIKX0DER&pf_rd_r=6722W3709RPF696KQD17).
-    * [Chapter 1: Arrays & Strings](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/CrackingTheCodingInterview/array_and_string)
-	* [Chapter 2: Linked Lists](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/CrackingTheCodingInterview/linked_list)
-	* [Chapter 3: Stacks and Queues](https://github.com/charulagrl/Data-Structures-and-Algorithms/tree/master/CrackingTheCodingInterview/stack_and_queue)
-	* [Chapter 4: Trees and Graphs](https://github.com/charulagrl/data-structures-and-algorithms/tree/master/cracking_the_coding_interview/trees_and_graphs)
+* Chapter wise [solution](/cracking_the_coding_interview) to questions in the book [Cracking the Coding Interview](https://www.amazon.com/dp/0984782850/ref=pd_lpo_sbs_dp_ss_1?pf_rd_p=1944687622&pf_rd_s=lpo-top-stripe-1&pf_rd_t=201&pf_rd_i=098478280X&pf_rd_m=ATVPDKIKX0DER&pf_rd_r=6722W3709RPF696KQD17).
+    * [Chapter 1: Arrays & Strings](/cracking_the_coding_interview/array_and_string)
+	* [Chapter 2: Linked Lists](/cracking_the_coding_interview/linked_list)
+	* [Chapter 3: Stacks and Queues](/cracking_the_coding_interview/stack_and_queue)
+	* [Chapter 4: Trees and Graphs](/cracking_the_coding_interview/trees_and_graphs)
 
 ## Tests
 
