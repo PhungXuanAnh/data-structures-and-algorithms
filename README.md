@@ -45,3 +45,7 @@ It contains:
 
     python -m tests.searching_test
     python -m tests.sorting_test
+
+## Reference
+[https://www.tutorialspoint.com/data_structures_algorithms/index.htm](https://www.tutorialspoint.com/data_structures_algorithms/index.htm)
+[http://interactivepython.org/courselib/static/pythonds/index.html](http://interactivepython.org/courselib/static/pythonds/index.html)
