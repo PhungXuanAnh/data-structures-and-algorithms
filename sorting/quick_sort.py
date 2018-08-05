@@ -91,13 +91,15 @@ def quick_sort_helper(alist, left, right):
         return
 
     '''
-    Bước 2: Nếu không thì tiếp tục chọn phần tử chốt và thay đổi vị trí các phần tử theo chốt
+    Bước 2: Nếu không thì tiếp tục chọn phần tử chốt và
+            chuyển các phần tử lớn hơn chốt sang phải,
+            chuyển các phần tử nhỏ hơn chốt sang trái
     '''
     split_point = partition(alist, left, right)
 
     '''
     Bước 3: Dùng phần tử chốt, chia danh sách làm 2 phần không chứa phần tử chốt 
-            Tiếp tục sắp xếp đệ qui 2 danh sách này 
+            Tiếp tục sắp xếp đệ qui 2 danh sách này
     '''
     quick_sort_helper(alist, left, split_point - 1)
     quick_sort_helper(alist, split_point + 1, right)
