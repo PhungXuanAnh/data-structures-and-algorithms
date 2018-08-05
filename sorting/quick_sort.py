@@ -40,7 +40,7 @@ def partition(alist, left, right):
                 Hoặc con trỏ bên trái nhỏ hơn con trỏ bên phải 
                 Thì di chuyển sang phải
         '''
-        while left_p < right_p and alist[left_p] <= pivot:
+        while left_p <= right_p and alist[left_p] <= pivot:
             left_p = left_p + 1
 
         '''
@@ -49,7 +49,7 @@ def partition(alist, left, right):
                 Hoặc con trỏ bên phải lớn hơn con trỏ bên trái
                 Thì di chuyển sang trái
         '''
-        while right_p > left_p and alist[right_p] >= pivot:
+        while right_p >= left_p and alist[right_p] >= pivot:
             right_p = right_p - 1
 
         '''
@@ -110,7 +110,7 @@ def quickSort(alist):
     quick_sort_helper(alist, 0, len(alist) - 1)
 
 
-alist = [3, 4, 2, 1, 8, 6, 9, 0, 5, 7]
-
-quickSort(alist)
-print(alist)
+if __name__ == '__main__':
+    alist = [3, 4, 2, 1, 8, 6, 9, 0, 5, 7]
+    quickSort(alist)
+    print(alist)
