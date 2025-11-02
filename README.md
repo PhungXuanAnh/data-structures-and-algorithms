@@ -1,44 +1,27 @@
-- [interactive-coding-challenges](#interactive-coding-challenges)
-  - [Challenge Solutions](#challenge-solutions)
-  - [Anki Flashcards: Coding and Design](#anki-flashcards-coding-and-design)
-  - [Notebook Structure](#notebook-structure)
-    - [Problem Statement](#problem-statement)
-    - [Constraints](#constraints)
-    - [Test Cases](#test-cases)
-    - [Algorithm](#algorithm)
-    - [Hints](#hints)
-    - [Code (Challenge: Implement Me!)](#code-challenge-implement-me)
-    - [Unit Test](#unit-test)
-  - [Index](#index)
-    - [Challenges Categories](#challenges-categories)
-    - [Reference Implementations: Data Structures](#reference-implementations-data-structures)
-    - [Reference Implementations: Algorithms](#reference-implementations-algorithms)
-    - [Reference Implementations: TODO](#reference-implementations-todo)
-    - [Installing and Running Challenges](#installing-and-running-challenges)
-    - [Misc](#misc)
-  - [Challenges](#challenges)
-    - [Arrays and Strings](#arrays-and-strings)
-    - [Linked Lists](#linked-lists)
-    - [Stacks and Queues](#stacks-and-queues)
-    - [Graphs and Trees](#graphs-and-trees)
-    - [Sorting](#sorting)
-    - [Recursion and Dynamic Programming](#recursion-and-dynamic-programming)
-    - [Mathematics and Probability](#mathematics-and-probability)
-    - [Bit Manipulation](#bit-manipulation)
-    - [Online Judges](#online-judges)
-  - [Repo Structure](#repo-structure)
-  - [Notebook Installation](#notebook-installation)
-    - [Zero Install](#zero-install)
-    - [Jupyter Notebook](#jupyter-notebook)
-  - [Running Challenges](#running-challenges)
-    - [Notebooks](#notebooks)
-  - [Future Development](#future-development)
-  - [Contributing](#contributing)
-  - [Credits](#credits)
-    - [Resources](#resources)
-    - [Images](#images)
-  - [Contact Info](#contact-info)
-  - [License](#license)
+**NOTE:** This file is quite mess, algorithms must be categoried with its data structure. And we should learn basic things before resolving challenges, so I made a shorter document for learning and recall quickly everthing to prepare for an interview, it here: [README.shorter.md](README.shorter.md)
+
+- [Anki Flashcards: Coding and Design](#anki-flashcards-coding-and-design)
+- [Notebook Structure](#notebook-structure)
+- [Data Structures](#data-structures)
+- [Algorithms](#algorithms)
+- [Challenges](#challenges)
+  - [Arrays and Strings](#arrays-and-strings)
+  - [Linked Lists](#linked-lists)
+  - [Stacks and Queues](#stacks-and-queues)
+  - [Graphs and Trees](#graphs-and-trees)
+  - [Sorting](#sorting)
+  - [Recursion and Dynamic Programming](#recursion-and-dynamic-programming)
+  - [Mathematics and Probability](#mathematics-and-probability)
+  - [Bit Manipulation](#bit-manipulation)
+  - [Online Judges](#online-judges)
+  - [TODO](#todo)
+- [Running Challenges](#running-challenges)
+  - [Install Notebook](#install-notebook)
+  - [Run Notebooks](#run-notebooks)
+- [Contributing](#contributing)
+- [Credits](#credits)
+  - [Resources](#resources)
+  - [Images](#images)
 
 
 <br/>
@@ -46,8 +29,6 @@
   <img src="https://raw.githubusercontent.com/donnemartin/interactive-coding-challenges/master/images/cover_challenge.gif">
 </p>
 
-interactive-coding-challenges
-============
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -72,15 +53,7 @@ Notebooks also detail:
 
 Also included are **unit tested reference implementations** of various [data structures](#reference-implementations-data-structures) and [algorithms](#reference-implementations-algorithms).
 
-## Challenge Solutions
-
-<br/>
-<p align="center">
-  <img src="https://raw.githubusercontent.com/donnemartin/interactive-coding-challenges/master/images/cover_solution.gif">
-</p>
-<br/>
-
-## Anki Flashcards: Coding and Design
+# Anki Flashcards: Coding and Design
 
 <p align="center">
   <img src="http://i.imgur.com/b4YtAEN.png">
@@ -93,62 +66,42 @@ The provided [Anki flashcard deck](https://apps.ankiweb.net/) uses spaced repeti
 
 Great for use while on-the-go.
 
-## Notebook Structure
+# Notebook Structure
 
 Each challenge has two notebooks, a **challenge notebook** with unit tests for you to solve and a **solution notebook** for reference.
 
-### Problem Statement
+**Problem Statement**
 
 * States the problem to solve.
 
-### Constraints
+**Constraints**
 
 * Describes any constraints or assumptions.
 
-### Test Cases
+**Test Cases**
 
 * Describes the general and edge test cases that will be evaluated in the unit test.
 
-### Algorithm
+**Algorithm**
 
 * [Challenge Notebook] Empty, refer to the solution notebook algorithm section if you need a hint.
 * [Solution Notebook] One or more algorithm solution discussions, with Big-O time and space complexities.
 
-### Hints
+**Hints**
 
 * [Challenge Notebook] Provides on-demand [incremental hints](https://github.com/donnemartin/interactive-coding-challenges/issues/22) to help you arrive at the optimal solution.  Coming soon!
 
-### Code (Challenge: Implement Me!)
+**Code (Challenge: Implement Me!)**
 
 * [Challenge Notebook] Skeleton code for you to implement.
 * [Solution Notebook] One or more reference solutions.
 
-### Unit Test
+**Unit Test**
 
 * [Challenge Notebook] Unit test for your code.  Expected to fail until you solve the challenge.
 * [Solution Notebook] Unit test for the reference solution(s).
 
-## Index
-
-### Challenges Categories
-
-**Format**: Challenge Category - Number of Challenges
-
-* [Arrays and Strings](#arrays-and-strings) - 10
-* [Linked Lists](#linked-lists) - 8
-* [Stacks and Queues](#stacks-and-queues) - 8
-* [Graphs and Trees](#graphs-and-trees) - 21
-* [Sorting](#sorting) - 10
-* [Recursion and Dynamic Programming](#recursion-and-dynamic-programming) - 17
-* [Mathematics and Probability](#mathematics-and-probability) - 6
-* [Bit Manipulation](#bit-manipulation) - 8
-* [Online Judges](#online-judges) - 16
-* [System Design](https://github.com/donnemartin/system-design-primer#system-design-interview-questions-with-solutions) - 8
-* [Object Oriented Design](https://github.com/donnemartin/system-design-primer#object-oriented-design-interview-questions-with-solutions) - 8
-
-**Total number of challenges: 120**
-
-### Reference Implementations: Data Structures
+# Data Structures
 
 Unit tested, fully functional implementations of the following data structures:
 
@@ -162,7 +115,7 @@ Unit tested, fully functional implementations of the following data structures:
 * [Priority Queue](http://nbviewer.ipython.org/github/donnemartin/interactive-coding-challenges/blob/master/arrays_strings/priority_queue/priority_queue_solution.ipynb)
 * [Hash Map](http://nbviewer.ipython.org/github/donnemartin/interactive-coding-challenges/blob/master/arrays_strings/hash_map/hash_map_solution.ipynb)
 
-### Reference Implementations: Algorithms
+# Algorithms
 
 Unit tested, fully functional implementations of the following algorithms:
 
@@ -182,35 +135,7 @@ Unit tested, fully functional implementations of the following algorithms:
 * [Knapsack Unbounded](http://nbviewer.ipython.org/github/donnemartin/interactive-coding-challenges/blob/master/recursion_dynamic/knapsack_unbounded/knapsack_unbounded_solution.ipynb)
 * [Sieve of Eratosthenes](http://nbviewer.ipython.org/github/donnemartin/interactive-coding-challenges/blob/master/math_probability/generate_primes/check_prime_solution.ipynb)
 
-### Reference Implementations: TODO
-
-* [A*](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Bellman-Ford](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Bloom Filter](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Convex Hull](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Fisher-Yates Shuffle](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Kruskal's](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Max Flow](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Prim's](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Rabin-Karp](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Traveling Salesman](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Union Find](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Contribute](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-
-### Installing and Running Challenges
-
-* [Repo Structure](#repo-structure)
-* [Notebook Installation](#notebook-installation)
-* [Running Challenges](#running-challenges)
-
-### Misc
-
-* [Contributing](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
-* [Credits](#credits)
-* [Contact Info](#contact-info)
-* [License](#license)
-
-## Challenges
+# Challenges
 
 [Image Credits](#credits)
 
@@ -220,7 +145,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Arrays and Strings
+## Arrays and Strings
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -248,7 +173,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Linked Lists
+## Linked Lists
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -271,7 +196,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Stacks and Queues
+## Stacks and Queues
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -293,7 +218,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Graphs and Trees
+## Graphs and Trees
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -328,7 +253,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Sorting
+## Sorting
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -357,7 +282,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Recursion and Dynamic Programming
+## Recursion and Dynamic Programming
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -392,7 +317,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Mathematics and Probability
+## Mathematics and Probability
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -416,7 +341,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Bit Manipulation
+## Bit Manipulation
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -439,7 +364,7 @@ Unit tested, fully functional implementations of the following algorithms:
 </p>
 <br/>
 
-### Online Judges
+## Online Judges
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
 
@@ -463,39 +388,27 @@ Unit tested, fully functional implementations of the following algorithms:
 | Maximizing xor | [Challenge](http://nbviewer.ipython.org/github/donnemartin/interactive-coding-challenges/blob/master/online_judges/maximizing_xor/maximizing_xor_challenge.ipynb) │ [Solution](http://nbviewer.ipython.org/github/donnemartin/interactive-coding-challenges/blob/master/online_judges/maximizing_xor/maximizing_xor_solution.ipynb) |
 | Add a challenge | [Contribute](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md) │ [Contribute](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md) |
 
-## Repo Structure
 
-```
-interactive-coding-challenges        # Repo
-├─ arrays_strings                    # Category of challenges
-│  ├─ rotation                       # Challenge folder
-│  │  ├─ rotation_challenge.ipynb    # Challenge notebook
-│  │  ├─ rotation_solution.ipynb     # Solution notebook
-│  │  ├─ test_rotation.py            # Unit test*
-│  ├─ compress
-│  │  ├─ compress_challenge.ipynb
-│  │  ├─ compress_solution.ipynb
-│  │  ├─ test_compress.py
-│  ├─ ...
-├─ linked_lists
-│  ├─ palindrome
-│  │  └─ ...
-│  ├─ ...
-├─ ...
-```
+## TODO
+
+* [A*](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Bellman-Ford](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Bloom Filter](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Convex Hull](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Fisher-Yates Shuffle](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Kruskal's](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Max Flow](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Prim's](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Rabin-Karp](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Traveling Salesman](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Union Find](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
+* [Contribute](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md)
 
 <i>\*The notebooks (.ipynb) read/write the associated unit test (.py) file.</i>
 
+# Running Challenges
 
-## Notebook Installation
-
-### Zero Install
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master)
-
-This README contains links to [Binder](https://mybinder.org/v2/gh/donnemartin/interactive-coding-challenges/master) , which hosts **dynamic notebooks** of the repo's contents online with no installation needed.
-
-### Jupyter Notebook
+## Install Notebook
 
 Run:
 
@@ -503,19 +416,9 @@ Run:
 pip install jupyter
 ```
 
-For detailed instructions, scripts, and tools to more optimally set up your development environment, check out the [dev-setup](https://github.com/donnemartin/dev-setup) repo.
-
-For more details on notebook installation, follow the directions [here](http://ipython.org/install.html).
-
-More information on IPython/Jupyter Notebooks can be found [here](http://ipython.org/notebook.html).
-
-## Running Challenges
-
-### Notebooks
+## Run Notebooks
 
 Challenges are provided in the form of **IPython/Jupyter Notebooks** and have been **tested with Python 2.7 and Python 3.x**.
-
-*If you need to install IPython/Jupyter Notebook, see the [Notebook Installation](#notebook-installation) section.*
 
 * This README contains links to [nbviewer](http://nbviewer.ipython.org), which hosts **static notebooks** of the repo's contents
 * To interact with or to modify elements within the **dynamic notebooks**, refer to the instructions below
@@ -536,19 +439,7 @@ This will launch your web browser with the list of challenge categories:
 * Solve the challenge and verify it passes the unit test
 * Check out the accompanying **Solution Notebook** for further discussion
 
-To **debug** your solution with pdb, refer to the following [ticket](https://github.com/donnemartin/interactive-coding-challenges/issues/11).
-
-Note: If your solution is different from those listed in the Solution Notebook, consider submitting a pull request so others can benefit from your work.  Review the [Contributing Guidelines](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md) for details.
-
-## Future Development
-
-Challenges, solutions, and unit tests are presented in the form of **IPython/Jupyter Notebooks**.
-
-* Notebooks currently contain mostly Python solutions (tested on both Python 2.7 and Python 3.x), but can be extended to include [40+ supported languages](https://github.com/ipython/ipython/wiki/IPython-kernels-for-other-languages)
-* Repo will be **continually updated** with new solutions and challenges
-* [Contributions](https://github.com/donnemartin/interactive-coding-challenges/blob/master/CONTRIBUTING.md) are welcome!
-
-## Contributing
+# Contributing
 
 Contributions are welcome!
 
@@ -558,9 +449,9 @@ Review the [Contributing Guidelines](https://github.com/donnemartin/interactive-
 * Add solutions to existing challenges
 * Add new challenges
 
-## Credits
+# Credits
 
-### Resources
+## Resources
 
 * [Cracking the Coding Interview](http://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/098478280X) | [GitHub Solutions](https://github.com/gaylemcd/ctci)
 * [Programming Interviews Exposed](http://www.amazon.com/gp/product/1118261364/)
@@ -570,7 +461,7 @@ Review the [Contributing Guidelines](https://github.com/donnemartin/interactive-
 * [HackerRank](https://www.hackerrank.com)
 * [LeetCode](https://leetcode.com/)
 
-### Images
+## Images
 
 * [Arrays and Strings: nltk.org](http://www.nltk.org/images/string-slicing.png)
 * [Linked Lists: wikipedia.org](https://upload.wikimedia.org/wikipedia/commons/6/6d/Singly-linked-list.svg)
@@ -582,27 +473,3 @@ Review the [Contributing Guidelines](https://github.com/donnemartin/interactive-
 * [Mathematics and Probability: wikipedia.org](https://upload.wikimedia.org/wikipedia/commons/d/d2/Gaussian_distribution_2.jpg)
 * [Bit Manipulation: wikipedia.org](https://upload.wikimedia.org/wikipedia/commons/5/5c/Rotate_left_logically.svg)
 * [Online Judges: topcoder.com](https://www.topcoder.com/wp-content/uploads/2014/05/topcoder_logo_home_sm.png)
-
-## Contact Info
-
-Feel free to contact me to discuss any issues, questions, or comments.
-
-My contact info can be found on my [GitHub page](https://github.com/donnemartin).
-
-## License
-
-*I am providing code and resources in this repository to you under an open source license.  Because this is my personal repository, the license you receive to my code and resources is from me and not my employer (Facebook).*
-
-    Copyright 2015 Donne Martin
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
