@@ -1,3 +1,46 @@
+- [interactive-coding-challenges](#interactive-coding-challenges)
+  - [Challenge Solutions](#challenge-solutions)
+  - [Anki Flashcards: Coding and Design](#anki-flashcards-coding-and-design)
+  - [Notebook Structure](#notebook-structure)
+    - [Problem Statement](#problem-statement)
+    - [Constraints](#constraints)
+    - [Test Cases](#test-cases)
+    - [Algorithm](#algorithm)
+    - [Hints](#hints)
+    - [Code (Challenge: Implement Me!)](#code-challenge-implement-me)
+    - [Unit Test](#unit-test)
+  - [Index](#index)
+    - [Challenges Categories](#challenges-categories)
+    - [Reference Implementations: Data Structures](#reference-implementations-data-structures)
+    - [Reference Implementations: Algorithms](#reference-implementations-algorithms)
+    - [Reference Implementations: TODO](#reference-implementations-todo)
+    - [Installing and Running Challenges](#installing-and-running-challenges)
+    - [Misc](#misc)
+  - [Challenges](#challenges)
+    - [Arrays and Strings](#arrays-and-strings)
+    - [Linked Lists](#linked-lists)
+    - [Stacks and Queues](#stacks-and-queues)
+    - [Graphs and Trees](#graphs-and-trees)
+    - [Sorting](#sorting)
+    - [Recursion and Dynamic Programming](#recursion-and-dynamic-programming)
+    - [Mathematics and Probability](#mathematics-and-probability)
+    - [Bit Manipulation](#bit-manipulation)
+    - [Online Judges](#online-judges)
+  - [Repo Structure](#repo-structure)
+  - [Notebook Installation](#notebook-installation)
+    - [Zero Install](#zero-install)
+    - [Jupyter Notebook](#jupyter-notebook)
+  - [Running Challenges](#running-challenges)
+    - [Notebooks](#notebooks)
+  - [Future Development](#future-development)
+  - [Contributing](#contributing)
+  - [Credits](#credits)
+    - [Resources](#resources)
+    - [Images](#images)
+  - [Contact Info](#contact-info)
+  - [License](#license)
+
+
 <br/>
 <p align="center">
   <img src="https://raw.githubusercontent.com/donnemartin/interactive-coding-challenges/master/images/cover_challenge.gif">
@@ -49,23 +92,6 @@ The provided [Anki flashcard deck](https://apps.ankiweb.net/) uses spaced repeti
 * [Coding deck](anki_cards/Coding.apkg)
 
 Great for use while on-the-go.
-
-### Design Resource: The System Design Primer
-
-Looking for resources to help you prep for the **System Design** and **Object-Oriented Design interviews**?
-
-<p align="center">
-  <img src="http://i.imgur.com/zdCAkB3.png">
-  <br/>
-</p>
-
-Check out the sister repo [The System Design Primer](https://github.com/donnemartin/system-design-primer), which contains additional Anki decks:
-
-* [System design deck](https://github.com/donnemartin/system-design-primer/blob/master/resources/flash_cards/System%20Design.apkg)
-* [System design exercises deck](https://github.com/donnemartin/system-design-primer/blob/master/resources/flash_cards/System%20Design%20Exercises.apkg)
-* [Object oriented design exercises deck](https://github.com/donnemartin/system-design-primer/blob/master/resources/flash_cards/OO%20Design.apkg)
-
-![](https://camo.githubusercontent.com/e45e39c36eebcc4c66e1aecd4e4145112d8e88e3/687474703a2f2f692e696d6775722e636f6d2f6a6a3341354e382e706e67)
 
 ## Notebook Structure
 
