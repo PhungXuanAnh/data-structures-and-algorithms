@@ -63,8 +63,17 @@
     .quicksort-wrapper .bg-yellow { background: #f39c12; color: white !important; }
     .quicksort-wrapper .bg-blue { background: #3498db; color: white !important; }
     .quicksort-wrapper .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-    .quicksort-wrapper .stat-box { background: #ecf0f1; padding: 15px; border-radius: 5px; text-align: center; }
-    .quicksort-wrapper .stat-value { font-size: 24px; font-weight: bold; }
+    .quicksort-wrapper .stat-box { 
+        background: #ecf0f1; 
+        padding: 10px 15px; 
+        border-radius: 5px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .quicksort-wrapper .stat-label { font-size: 10px; }
+    .quicksort-wrapper .stat-value { font-size: 10px; font-weight: bold; }
     .quicksort-wrapper .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
     .quicksort-wrapper button {
         background: #3498db;
@@ -102,8 +111,8 @@
         <div class="bars-container" id="bars-container"></div>
 
         <div class="stats-grid">
-            <div class="stat-box"><div>Comparisons</div><div class="stat-value" id="comparisons">0</div></div>
-            <div class="stat-box"><div>Swaps</div><div class="stat-value" id="swaps">0</div></div>
+            <div class="stat-box"><span class="stat-label">Comparisons:</span><span class="stat-value" id="comparisons">0</span></div>
+            <div class="stat-box"><span class="stat-label">Swaps:</span><span class="stat-value" id="swaps">0</span></div>
         </div>
 
         <div class="controls">
