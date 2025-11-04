@@ -1,0 +1,297 @@
+<style>
+    .quicksort-wrapper {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 100%;
+        padding: 20px;
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+    .quicksort-wrapper * { color: #2c3e50 !important; opacity: 1 !important; }
+    .quicksort-wrapper h1 {
+        color: #2c3e50 !important;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 10px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .quicksort-wrapper .viz-container {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .quicksort-wrapper .step-display {
+        background: #e8f4f8 !important;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px 0;
+        border-left: 4px solid #3498db;
+    }
+    .quicksort-wrapper .bars-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 2px;
+        min-height: 300px;
+        padding: 20px 0;
+        background: white;
+        margin: 20px 0;
+    }
+    .quicksort-wrapper .bar {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .quicksort-wrapper .bar-value {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 0;
+        font-weight: bold;
+        font-size: 11px;
+        border-radius: 3px 3px 0 0;
+        transition: all 0.3s;
+    }
+    .quicksort-wrapper .bar-index { font-size: 10px; margin-top: 3px; color: #7f8c8d !important; }
+    .quicksort-wrapper .bg-gray { background: #95a5a6; color: white !important; }
+    .quicksort-wrapper .bg-green { background: #2ecc71; color: white !important; }
+    .quicksort-wrapper .bg-red { background: #e74c3c; color: white !important; }
+    .quicksort-wrapper .bg-yellow { background: #f39c12; color: white !important; }
+    .quicksort-wrapper .bg-blue { background: #3498db; color: white !important; }
+    .quicksort-wrapper .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+    .quicksort-wrapper .stat-box { background: #ecf0f1; padding: 15px; border-radius: 5px; text-align: center; }
+    .quicksort-wrapper .stat-value { font-size: 24px; font-weight: bold; }
+    .quicksort-wrapper .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+    .quicksort-wrapper button {
+        background: #3498db;
+        color: white !important;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .quicksort-wrapper button:disabled { background: #95a5a6; cursor: not-allowed; }
+    .quicksort-wrapper .btn-green { background: #27ae60; }
+    .quicksort-wrapper .btn-purple { background: #8e44ad; }
+    .quicksort-wrapper .slider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quicksort-wrapper .slider-group { background: #ecf0f1; padding: 15px; border-radius: 5px; }
+    .quicksort-wrapper .slider-controls { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+    .quicksort-wrapper .slider-controls button { padding: 8px 12px; }
+    .quicksort-wrapper input[type="range"] { flex: 1; }
+    .quicksort-wrapper .legend { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+    .quicksort-wrapper .legend-item { display: flex; align-items: center; gap: 8px; }
+    .quicksort-wrapper .legend-box { width: 20px; height: 20px; border-radius: 3px; }
+</style>
+
+<div class="quicksort-wrapper">
+    <div class="viz-container">
+        <h1>🎯 Quick Sort Visualization</h1>
+        <p style="text-align: center">Watch the divide-and-conquer algorithm partition the array</p>
+
+        <div class="step-display">
+            <h3>Current Step</h3>
+            <div id="step-action"><strong>Action:</strong> Ready</div>
+            <div id="step-details" style="margin-top: 8px;"><strong>Details:</strong> Click button to begin</div>
+        </div>
+
+        <div class="bars-container" id="bars-container"></div>
+
+        <div class="stats-grid">
+            <div class="stat-box"><div>Comparisons</div><div class="stat-value" id="comparisons">0</div></div>
+            <div class="stat-box"><div>Swaps</div><div class="stat-value" id="swaps">0</div></div>
+        </div>
+
+        <div class="controls">
+            <button id="btn-auto" class="btn-green">▶ Auto Sort</button>
+            <button id="btn-next" class="btn-purple">⏭ Next Step</button>
+            <button id="btn-new">🔄 New Array</button>
+        </div>
+
+        <div class="slider-grid">
+            <div class="slider-group">
+                <div><strong>Array Size:</strong> <span id="size-value">30</span></div>
+                <div class="slider-controls">
+                    <button id="size-minus">-</button>
+                    <input type="range" id="size-slider" min="10" max="50" value="30">
+                    <button id="size-plus">+</button>
+                </div>
+            </div>
+            <div class="slider-group">
+                <div><strong>Speed:</strong> <span id="speed-value">50</span>ms</div>
+                <div class="slider-controls">
+                    <button id="speed-minus">-</button>
+                    <input type="range" id="speed-slider" min="10" max="300" step="10" value="50">
+                    <button id="speed-plus">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-box bg-gray"></div><span>Unsorted</span></div>
+            <div class="legend-item"><div class="legend-box bg-blue"></div><span>Partition</span></div>
+            <div class="legend-item"><div class="legend-box bg-yellow"></div><span>Comparing</span></div>
+            <div class="legend-item"><div class="legend-box bg-red"></div><span>Pivot</span></div>
+            <div class="legend-item"><div class="legend-box bg-green"></div><span>Sorted</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    let array = [], sorting = false, speed = 50, arraySize = 30;
+    let activeIndices = [], pivot = null, partitionRange = null, sorted = [];
+    let stats = { comparisons: 0, swaps: 0 };
+    let currentStep = { action: 'Ready to sort', details: 'Click "Auto Sort" to begin' };
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function generateArray() {
+        array = Array.from({ length: arraySize }, () => Math.floor(Math.random() * 90) + 10);
+        activeIndices = []; pivot = null; partitionRange = null; sorted = [];
+        stats = { comparisons: 0, swaps: 0 };
+        currentStep = { action: 'Ready', details: 'Click Auto Sort or Next Step' };
+        sorting = false; render();
+    }
+
+    function getBarColor(i) {
+        if (sorted.includes(i)) return 'bg-green';
+        if (pivot === i) return 'bg-red';
+        if (activeIndices.includes(i)) return 'bg-yellow';
+        if (partitionRange && i >= partitionRange[0] && i <= partitionRange[1]) return 'bg-blue';
+        return 'bg-gray';
+    }
+
+    function render() {
+        document.getElementById('bars-container').innerHTML = array.map((v, i) => 
+            `<div class="bar"><div class="bar-value ${getBarColor(i)}" style="height:${v*3}px">${v}</div><div class="bar-index">${i}</div></div>`
+        ).join('');
+        document.getElementById('step-action').innerHTML = `<strong>Action:</strong> ${currentStep.action}`;
+        document.getElementById('step-details').innerHTML = `<strong>Details:</strong> ${currentStep.details}`;
+        document.getElementById('comparisons').textContent = stats.comparisons;
+        document.getElementById('swaps').textContent = stats.swaps;
+        const btnAuto = document.getElementById('btn-auto');
+        btnAuto.disabled = sorting;
+        btnAuto.textContent = sorting ? '⏸ Sorting...' : '▶ Auto Sort';
+    }
+
+    async function partition(arr, low, high, isAuto) {
+        const pivotValue = arr[high];
+        pivot = high;
+        partitionRange = [low, high];
+        currentStep = { action: 'Pivot selected', details: `Chose ${pivotValue} at index ${high} as pivot` };
+        render();
+        if (isAuto) await sleep(speed * 2);
+
+        let i = low - 1;
+        for (let j = low; j < high; j++) {
+            activeIndices = [j];
+            stats.comparisons++;
+            currentStep = { action: 'Comparing', details: `Is ${arr[j]} ≤ ${pivotValue}? ${arr[j] <= pivotValue ? 'Yes' : 'No'}` };
+            render();
+            if (isAuto) await sleep(speed);
+
+            if (arr[j] <= pivotValue) {
+                i++;
+                if (i !== j) {
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                    stats.swaps++;
+                    currentStep = { action: 'Swapping', details: `Swapped ${arr[i]} with ${arr[j]}` };
+                    render();
+                    if (isAuto) await sleep(speed);
+                }
+            }
+        }
+        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+        stats.swaps++;
+        currentStep = { action: 'Pivot placed', details: `Pivot ${pivotValue} now at index ${i + 1}` };
+        render();
+        if (isAuto) await sleep(speed * 2);
+
+        sorted.push(i + 1);
+        pivot = null; activeIndices = []; partitionRange = null;
+        return i + 1;
+    }
+
+    async function quickSortIterative(arr, isAuto) {
+        const stack = [[0, arr.length - 1]];
+        while (stack.length > 0) {
+            const [low, high] = stack.pop();
+            if (low < high) {
+                partitionRange = [low, high];
+                currentStep = { action: 'Partitioning', details: `Range [${low}, ${high}]` };
+                render();
+                if (isAuto) await sleep(speed);
+                const pi = await partition(arr, low, high, isAuto);
+                stack.push([pi + 1, high], [low, pi - 1]);
+            } else if (low === high && low >= 0 && !sorted.includes(low)) {
+                sorted.push(low);
+                currentStep = { action: 'Single element', details: `Element at ${low} sorted` };
+                render();
+                if (isAuto) await sleep(speed);
+            }
+        }
+    }
+
+    async function autoSort() {
+        if (sorting) return;
+        sorting = true;
+        stats = { comparisons: 0, swaps: 0 };
+        sorted = [];
+        currentStep = { action: 'Starting', details: 'Beginning Quick Sort...' };
+        render();
+        await quickSortIterative(array, true);
+        sorting = false;
+        currentStep = { action: 'Complete!', details: 'Array fully sorted!' };
+        render();
+    }
+
+    document.getElementById('btn-auto').addEventListener('click', autoSort);
+    document.getElementById('btn-new').addEventListener('click', generateArray);
+    document.getElementById('size-slider').addEventListener('input', e => {
+        arraySize = +e.target.value;
+        document.getElementById('size-value').textContent = arraySize;
+        if (!sorting) generateArray();
+    });
+    document.getElementById('speed-slider').addEventListener('input', e => {
+        speed = +e.target.value;
+        document.getElementById('speed-value').textContent = speed;
+    });
+    document.getElementById('size-minus').addEventListener('click', () => {
+        if (arraySize > 10 && !sorting) {
+            arraySize -= 5;
+            document.getElementById('size-slider').value = arraySize;
+            document.getElementById('size-value').textContent = arraySize;
+            generateArray();
+        }
+    });
+    document.getElementById('size-plus').addEventListener('click', () => {
+        if (arraySize < 50 && !sorting) {
+            arraySize += 5;
+            document.getElementById('size-slider').value = arraySize;
+            document.getElementById('size-value').textContent = arraySize;
+            generateArray();
+        }
+    });
+    document.getElementById('speed-minus').addEventListener('click', () => {
+        if (speed > 10) {
+            speed -= 20;
+            document.getElementById('speed-slider').value = speed;
+            document.getElementById('speed-value').textContent = speed;
+        }
+    });
+    document.getElementById('speed-plus').addEventListener('click', () => {
+        if (speed < 300) {
+            speed += 20;
+            document.getElementById('speed-slider').value = speed;
+            document.getElementById('speed-value').textContent = speed;
+        }
+    });
+
+    generateArray();
+})();
+</script>
