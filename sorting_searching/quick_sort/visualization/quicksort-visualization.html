@@ -147,6 +147,7 @@
     let activeIndices = [], pivot = null, partitionRange = null, sorted = [];
     let stats = { comparisons: 0, swaps: 0 };
     let currentStep = { action: 'Ready to sort', details: 'Click "Auto Sort" to begin' };
+    let stepMode = false, stepGenerator = null;
 
     function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -175,7 +176,9 @@
         document.getElementById('comparisons').textContent = stats.comparisons;
         document.getElementById('swaps').textContent = stats.swaps;
         const btnAuto = document.getElementById('btn-auto');
-        btnAuto.disabled = sorting;
+        const btnNext = document.getElementById('btn-next');
+        btnAuto.disabled = sorting || stepMode;
+        btnNext.disabled = sorting && !stepMode;
         btnAuto.textContent = sorting ? '⏸ Sorting...' : '▶ Auto Sort';
     }
 
@@ -240,6 +243,7 @@
     async function autoSort() {
         if (sorting) return;
         sorting = true;
+        stepMode = false;
         stats = { comparisons: 0, swaps: 0 };
         sorted = [];
         currentStep = { action: 'Starting', details: 'Beginning Quick Sort...' };
@@ -250,7 +254,79 @@
         render();
     }
 
+    function* quickSortSteps(arr) {
+        const stack = [[0, arr.length - 1]];
+        while (stack.length > 0) {
+            const [low, high] = stack.pop();
+            if (low < high) {
+                partitionRange = [low, high];
+                currentStep = { action: 'Partitioning', details: `Range [${low}, ${high}]` };
+                yield;
+
+                const pivotValue = arr[high];
+                pivot = high;
+                currentStep = { action: 'Pivot selected', details: `Chose ${pivotValue} at index ${high} as pivot` };
+                yield;
+
+                let i = low - 1;
+                for (let j = low; j < high; j++) {
+                    activeIndices = [j];
+                    stats.comparisons++;
+                    currentStep = { action: 'Comparing', details: `Is ${arr[j]} ≤ ${pivotValue}? ${arr[j] <= pivotValue ? 'Yes' : 'No'}` };
+                    yield;
+
+                    if (arr[j] <= pivotValue) {
+                        i++;
+                        if (i !== j) {
+                            [arr[i], arr[j]] = [arr[j], arr[i]];
+                            stats.swaps++;
+                            currentStep = { action: 'Swapping', details: `Swapped ${arr[i]} with ${arr[j]}` };
+                            yield;
+                        }
+                    }
+                }
+                [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+                stats.swaps++;
+                currentStep = { action: 'Pivot placed', details: `Pivot ${pivotValue} now at index ${i + 1}` };
+                yield;
+
+                const pi = i + 1;
+                sorted.push(pi);
+                pivot = null;
+                activeIndices = [];
+                partitionRange = null;
+                stack.push([pi + 1, high], [low, pi - 1]);
+            } else if (low === high && low >= 0 && !sorted.includes(low)) {
+                sorted.push(low);
+                currentStep = { action: 'Single element', details: `Element at ${low} sorted` };
+                yield;
+            }
+        }
+        currentStep = { action: 'Complete!', details: 'Array fully sorted!' };
+        stepMode = false;
+    }
+
+    function nextStep() {
+        if (!stepMode) {
+            stepMode = true;
+            sorting = true;
+            stats = { comparisons: 0, swaps: 0 };
+            sorted = [];
+            stepGenerator = quickSortSteps(array);
+        }
+        
+        const result = stepGenerator.next();
+        render();
+        
+        if (result.done) {
+            sorting = false;
+            stepMode = false;
+            stepGenerator = null;
+        }
+    }
+
     document.getElementById('btn-auto').addEventListener('click', autoSort);
+    document.getElementById('btn-next').addEventListener('click', nextStep);
     document.getElementById('btn-new').addEventListener('click', generateArray);
     document.getElementById('size-slider').addEventListener('input', e => {
         arraySize = +e.target.value;
