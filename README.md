@@ -1,4 +1,4 @@
-**NOTE:** This file is quite mess, algorithms must be categoried with its data structure. And we should learn basic things before resolving challenges, so I made a shorter document for learning and recall quickly everthing to prepare for an interview, it here: [README.shorter.md](README.shorter.md)
+**NOTE:** This file is quite mess, algorithms must be categoried with its data structure. And we should learn basic things before resolving challenges, so I made a shorter document for learning and recall quickly everthing to prepare for an interview, it call visualization for easy understanding, it here: [README.shorter.md](README.shorter.md)
 
 - [Anki Flashcards: Coding and Design](#anki-flashcards-coding-and-design)
 - [Notebook Structure](#notebook-structure)
