@@ -2,7 +2,7 @@
 
 ## Sort
 * [Bubble sort]()
-* [Quick sort]([sorting_searching/quick_sort/quick_sort_solution.ipynb](https://colab.research.google.com/github/PhungXuanAnh/data-structures-and-algorithms/blob/master/sorting_searching/quick_sort/quick_sort_solution.ipynb?flush_cache=true#scrollTo=yuT2Qnu2QKGi))
+* [Quick sort](https://colab.research.google.com/github/PhungXuanAnh/data-structures-and-algorithms/blob/master/sorting_searching/quick_sort/quick_sort_solution.ipynb)
 * [Merge sort]()
 
 ## Search
