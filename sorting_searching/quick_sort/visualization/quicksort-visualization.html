@@ -109,7 +109,7 @@
         <div class="controls">
             <button id="btn-auto" class="btn-green">▶ Auto Sort</button>
             <button id="btn-next" class="btn-purple">⏭ Next Step</button>
-            <button id="btn-new">🔄 New Array</button>
+            <button id="btn-new">⏹ Stop</button>
         </div>
 
         <div class="slider-grid">
@@ -152,11 +152,16 @@
     function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
     function generateArray() {
+        // Stop any ongoing sorting
+        sorting = false;
+        stepMode = false;
+        stepGenerator = null;
+        
         array = Array.from({ length: arraySize }, () => Math.floor(Math.random() * 90) + 10);
         activeIndices = []; pivot = null; partitionRange = null; sorted = [];
         stats = { comparisons: 0, swaps: 0 };
         currentStep = { action: 'Ready', details: 'Click Auto Sort or Next Step' };
-        sorting = false; render();
+        render();
     }
 
     function getBarColor(i) {
@@ -183,6 +188,8 @@
     }
 
     async function partition(arr, low, high, isAuto) {
+        if (!sorting) return low; // Check if stopped
+        
         const pivotValue = arr[high];
         pivot = high;
         partitionRange = [low, high];
@@ -192,6 +199,8 @@
 
         let i = low - 1;
         for (let j = low; j < high; j++) {
+            if (!sorting) return low; // Check if stopped
+            
             activeIndices = [j];
             stats.comparisons++;
             currentStep = { action: 'Comparing', details: `Is ${arr[j]} ≤ ${pivotValue}? ${arr[j] <= pivotValue ? 'Yes' : 'No'}` };
@@ -222,7 +231,7 @@
 
     async function quickSortIterative(arr, isAuto) {
         const stack = [[0, arr.length - 1]];
-        while (stack.length > 0) {
+        while (stack.length > 0 && sorting) {
             const [low, high] = stack.pop();
             if (low < high) {
                 partitionRange = [low, high];
@@ -230,6 +239,7 @@
                 render();
                 if (isAuto) await sleep(speed);
                 const pi = await partition(arr, low, high, isAuto);
+                if (!sorting) break; // Stop if sorting was cancelled
                 stack.push([pi + 1, high], [low, pi - 1]);
             } else if (low === high && low >= 0 && !sorted.includes(low)) {
                 sorted.push(low);
