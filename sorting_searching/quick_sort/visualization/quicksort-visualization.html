@@ -122,10 +122,10 @@
                 </div>
             </div>
             <div class="slider-group">
-                <div><strong>Speed:</strong> <span id="speed-value">50</span>ms</div>
+                <div><strong>Speed:</strong> <span id="speed-value">300</span>ms</div>
                 <div class="slider-controls">
                     <button id="speed-minus">-</button>
-                    <input type="range" id="speed-slider" min="10" max="300" step="10" value="50">
+                    <input type="range" id="speed-slider" min="10" max="300" step="10" value="300">
                     <button id="speed-plus">+</button>
                 </div>
             </div>
@@ -143,7 +143,7 @@
 
 <script>
 (function() {
-    let array = [], sorting = false, speed = 50, arraySize = 30;
+    let array = [], sorting = false, speed = 300, arraySize = 30;
     let activeIndices = [], pivot = null, partitionRange = null, sorted = [];
     let stats = { comparisons: 0, swaps: 0 };
     let currentStep = { action: 'Ready to sort', details: 'Click "Auto Sort" to begin' };
