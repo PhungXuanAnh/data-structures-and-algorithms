@@ -73,10 +73,41 @@
             box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
         }
 
+        .merge-sort-wrapper .btn-reset {
+            background: #de1907 !important;
+        }
+
+        .merge-sort-wrapper .btn-reset:hover {
+            background: #b01406 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(222, 25, 7, 0.4);
+        }
+
+        .merge-sort-wrapper .btn-pause {
+            background: #8a6413 !important;
+        }
+
+        .merge-sort-wrapper .btn-pause:hover {
+            background: #6b4d0f !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 100, 19, 0.4);
+        }
+
+        .merge-sort-wrapper .btn-resume {
+            background: #ada205 !important;
+        }
+
+        .merge-sort-wrapper .btn-resume:hover {
+            background: #878104 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(173, 162, 5, 0.4);
+        }
+
         .merge-sort-wrapper button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            filter: blur(1px);
         }
 
         .merge-sort-wrapper .input-group {
@@ -180,6 +211,7 @@
             align-items: flex-start;
             margin: 30px 0;
             flex-wrap: wrap;
+            min-height: 100px; /* Reserve space even when hidden */
         }
 
         .merge-sort-wrapper .subarray {
@@ -200,7 +232,7 @@
             display: flex;
             gap: 4px;
             align-items: flex-end;
-            min-height: 120px;
+            min-height: 40px; /* Reduced to 1/3 of original 120px */
             position: relative;
         }
 
@@ -330,7 +362,7 @@
 
         <div class="visualization">
             <div class="array-container" id="arrayContainer"></div>
-            <div class="merge-visualization" id="mergeViz" style="display: none;">
+            <div class="merge-visualization" id="mergeViz" style="visibility: hidden;">
                 <div class="subarray">
                     <h4>Left Subarray</h4>
                     <div class="subarray-bars" id="leftSubarray"></div>
@@ -364,14 +396,6 @@
                         <span>Unsorted</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-box" style="background: #ebed6f;"></div>
-                        <span>Comparing</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: #d278f0;"></div>
-                        <span>Merging</span>
-                    </div>
-                    <div class="legend-item">
                         <div class="legend-box" style="background: #82e868;"></div>
                         <span>Sorted</span>
                     </div>
@@ -382,20 +406,20 @@
             <div class="controls-side">
                 <div class="speed-control">
                     <label>Speed:</label>
-                    <input type="range" id="speedSlider" min="100" max="5000" value="1500" step="100">
-                    <span id="speedLabel">1500ms</span>
+                    <input type="range" id="speedSlider" min="100" max="5000" value="1000" step="100">
+                    <span id="speedLabel">1000ms</span>
                 </div>
                 <div class="input-group">
                     <input type="text" id="arrayInput" placeholder="e.g., 38,27,43,3,9,82,10" value="38,27,43,3,9,82,10">
-                    <button class="btn-secondary" onclick="setCustomArray()">Set Array</button>
+                    <button class="btn-secondary" onclick="setCustomArray()" id="setArrayBtn">Set Array</button>
                 </div>
                 <div class="button-row">
-                    <button class="btn-secondary" onclick="generateRandomArray()">Random Array</button>
-                    <button class="btn-secondary" onclick="reset()">Reset</button>
+                    <button class="btn-secondary" onclick="generateRandomArray()" id="randomArrayBtn">Random Array</button>
+                    <button class="btn-secondary btn-reset" onclick="reset()">Reset</button>
                 </div>
                 <div class="button-row">
                     <button class="btn-primary" onclick="startSort()" id="sortBtn">Start</button>
-                    <button class="btn-secondary" onclick="togglePause()" id="pauseBtn" style="display: none;">Pause</button>
+                    <button class="btn-secondary btn-pause" onclick="togglePause()" id="pauseBtn" style="display: none;">Pause</button>
                 </div>
                 <div class="button-row">
                     <button class="btn-secondary" onclick="previousStep()" id="prevBtn" style="display: none;" disabled>Previous</button>
@@ -408,7 +432,7 @@
     <script>
     (function() {
         let array = [38, 27, 43, 3, 9, 82, 10];
-        let speed = 1500; // Default speed is 1.5 seconds
+        let speed = 1000; // Default speed is 1 second
         let sorting = false;
         let paused = false;
         let pauseResolve = null;
@@ -422,6 +446,8 @@
         const pauseBtn = document.getElementById('pauseBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const setArrayBtn = document.getElementById('setArrayBtn');
+        const randomArrayBtn = document.getElementById('randomArrayBtn');
         const speedSlider = document.getElementById('speedSlider');
         const speedLabel = document.getElementById('speedLabel');
         const mergeViz = document.getElementById('mergeViz');
@@ -464,6 +490,12 @@
         function sleep(ms) {
             return new Promise(resolve => {
                 setTimeout(async () => {
+                    // Check if cancelled
+                    if (!sorting) {
+                        resolve();
+                        return;
+                    }
+                    
                     // Check if we should auto-pause after one step
                     if (stepForwardMode) {
                         stepForwardMode = false;
@@ -475,7 +507,7 @@
                         nextBtn.disabled = false;
                     }
                     
-                    while (paused) {
+                    while (paused && sorting) {
                         await new Promise(r => pauseResolve = r);
                     }
                     resolve();
@@ -507,12 +539,12 @@
             
             // Restore visualization
             if (state.mergeVizVisible) {
-                mergeViz.style.display = 'flex';
+                mergeViz.style.visibility = 'visible';
                 if (state.leftArr) renderSubarray(leftSubarray, state.leftArr, 'Left', state.leftPointer, state.leftPicked);
                 if (state.rightArr) renderSubarray(rightSubarray, state.rightArr, 'Right', state.rightPointer, state.rightPicked);
                 if (state.result) renderSubarray(resultSubarray, state.result, 'Result');
             } else {
-                mergeViz.style.display = 'none';
+                mergeViz.style.visibility = 'hidden';
             }
             
             renderArray(array, state.highlights || {});
@@ -561,25 +593,51 @@
         }
 
         function reset() {
-            if (!sorting) {
-                mergeViz.style.display = 'none';
-                renderArray();
-                stepInfo.textContent = 'Array reset. Click "Start" to begin.';
+            // Stop any ongoing sorting
+            sorting = false;
+            paused = false;
+            
+            // Resolve any pending pause
+            if (pauseResolve) {
+                pauseResolve();
+                pauseResolve = null;
             }
+            
+            stepHistory = [];
+            currentStepIndex = -1;
+            
+            // Generate new random array
+            generateRandomArray();
+            
+            // Enable buttons
+            sortBtn.disabled = false;
+            setArrayBtn.disabled = false;
+            randomArrayBtn.disabled = false;
+            
+            // Hide pause and navigation buttons
+            pauseBtn.style.display = 'none';
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            
+            // Hide merge visualization
+            mergeViz.style.visibility = 'hidden';
+            
+            // Don't override the message from generateRandomArray
+            // stepInfo.textContent is already set by generateRandomArray()
         }
 
         function togglePause() {
             paused = !paused;
             if (paused) {
                 pauseBtn.textContent = 'Resume';
-                pauseBtn.classList.remove('btn-secondary');
-                pauseBtn.classList.add('btn-primary');
+                pauseBtn.classList.remove('btn-pause');
+                pauseBtn.classList.add('btn-resume');
                 prevBtn.disabled = (currentStepIndex === 0);
                 nextBtn.disabled = false;
             } else {
                 pauseBtn.textContent = 'Pause';
-                pauseBtn.classList.remove('btn-primary');
-                pauseBtn.classList.add('btn-secondary');
+                pauseBtn.classList.remove('btn-resume');
+                pauseBtn.classList.add('btn-pause');
                 prevBtn.disabled = true;
                 nextBtn.disabled = true;
                 if (pauseResolve) {
@@ -590,7 +648,9 @@
         }
 
         async function merge(arr, left, mid, right, tempArr) {
-            mergeViz.style.display = 'flex';
+            if (!sorting) return; // Check if cancelled
+            
+            mergeViz.style.visibility = 'visible';
             
             const leftArr = arr.slice(left, mid + 1);
             const rightArr = arr.slice(mid + 1, right + 1);
@@ -621,6 +681,8 @@
             await sleep(speed);
 
             while (i < leftArr.length && j < rightArr.length) {
+                if (!sorting) return; // Check if cancelled
+                
                 renderSubarray(leftSubarray, leftArr, 'Left', i, -1);
                 renderSubarray(rightSubarray, rightArr, 'Right', j, -1);
                 
@@ -684,6 +746,8 @@
             }
 
             while (i < leftArr.length) {
+                if (!sorting) return; // Check if cancelled
+                
                 result.push(leftArr[i]);
                 arr[k] = leftArr[i];
                 renderSubarray(leftSubarray, leftArr, 'Left', i, i);
@@ -707,6 +771,8 @@
             }
 
             while (j < rightArr.length) {
+                if (!sorting) return; // Check if cancelled
+                
                 result.push(rightArr[j]);
                 arr[k] = rightArr[j];
                 renderSubarray(rightSubarray, rightArr, 'Right', j, j);
@@ -757,7 +823,7 @@
             });
             await sleep(speed);
             
-            mergeViz.style.display = 'none';
+            mergeViz.style.visibility = 'hidden';
         }
 
         function renderSubarray(container, arr, label, pointerIdx = -1, pickedIdx = -1) {
@@ -767,7 +833,7 @@
             arr.forEach((value, index) => {
                 const bar = document.createElement('div');
                 bar.className = 'mini-bar';
-                const height = (value / maxValue) * 80 + 20;
+                const height = ((value / maxValue) * 80 + 20) / 3; // Reduce height to 1/3
                 bar.style.height = height + 'px';
                 bar.textContent = value;
                 
@@ -793,6 +859,8 @@
         }
 
         async function mergeSortHelper(arr, left, right, tempArr) {
+            if (!sorting) return; // Check if cancelled
+            
             if (left < right) {
                 const mid = Math.floor((left + right) / 2);
 
@@ -819,17 +887,22 @@
             stepHistory = [];
             currentStepIndex = -1;
             sortBtn.disabled = true;
+            setArrayBtn.disabled = true;
+            randomArrayBtn.disabled = true;
             pauseBtn.style.display = 'inline-block';
             prevBtn.style.display = 'inline-block';
             nextBtn.style.display = 'inline-block';
             prevBtn.disabled = true;
             nextBtn.disabled = true;
             pauseBtn.textContent = 'Pause';
-            pauseBtn.classList.remove('btn-primary');
-            pauseBtn.classList.add('btn-secondary');
+            pauseBtn.classList.remove('btn-resume');
+            pauseBtn.classList.add('btn-pause');
             
             const tempArr = new Array(array.length);
             await mergeSortHelper(array, 0, array.length - 1, tempArr);
+            
+            // Check if sorting was cancelled during execution
+            if (!sorting) return;
             
             stepInfo.textContent = '✅ Sorting complete! Array is now fully sorted.';
             const allIndices = array.map((_, i) => i);
@@ -843,6 +916,8 @@
             
             sorting = false;
             sortBtn.disabled = false;
+            setArrayBtn.disabled = false;
+            randomArrayBtn.disabled = false;
             pauseBtn.style.display = 'none';
             prevBtn.style.display = 'none';
             nextBtn.style.display = 'none';
