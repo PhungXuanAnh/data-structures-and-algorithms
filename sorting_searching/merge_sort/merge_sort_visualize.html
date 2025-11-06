@@ -1,0 +1,809 @@
+<style>
+        .merge-sort-wrapper {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 1200px;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .merge-sort-wrapper * { 
+            color: #2c3e50 !important; 
+            opacity: 1 !important; 
+        }
+
+        .merge-sort-wrapper .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .merge-sort-wrapper h1 {
+            text-align: center;
+            color: #333 !important;
+            margin-bottom: 30px;
+        }
+
+        .merge-sort-wrapper .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .merge-sort-wrapper button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .merge-sort-wrapper .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .merge-sort-wrapper .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .merge-sort-wrapper .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .merge-sort-wrapper .btn-secondary:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .merge-sort-wrapper button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .merge-sort-wrapper .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .merge-sort-wrapper input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
+
+        .merge-sort-wrapper .visualization {
+            min-height: 400px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .merge-sort-wrapper .array-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 4px;
+            margin: 20px 0;
+            min-height: 250px;
+        }
+
+        .merge-sort-wrapper .bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            padding-bottom: 5px;
+        }
+
+        .merge-sort-wrapper .bar.comparing {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.1);
+        }
+
+        .merge-sort-wrapper .bar.sorted {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .merge-sort-wrapper .bar.merging {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .merge-sort-wrapper .pointer {
+            position: absolute;
+            bottom: -35px;
+            font-size: 24px;
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        .merge-sort-wrapper .pointer.left {
+            color: #f093fb;
+        }
+
+        .merge-sort-wrapper .pointer.right {
+            color: #667eea;
+        }
+
+        .merge-sort-wrapper .pointer.result {
+            color: #43e97b;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .merge-sort-wrapper .merge-visualization {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .merge-sort-wrapper .subarray {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .merge-sort-wrapper .subarray h4 {
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .merge-sort-wrapper .subarray-bars {
+            display: flex;
+            gap: 4px;
+            align-items: flex-end;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .merge-sort-wrapper .mini-bar {
+            width: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            padding-bottom: 3px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .merge-sort-wrapper .mini-bar.active-left {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.1);
+        }
+
+        .merge-sort-wrapper .mini-bar.active-right {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.1);
+        }
+
+        .merge-sort-wrapper .mini-bar.picked {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .merge-sort-wrapper .mini-bar.picked-left {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .merge-sort-wrapper .mini-bar.picked-right {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .merge-sort-wrapper .arrow {
+            font-size: 20px;
+            color: #cbd5e0;
+            display: flex;
+            align-items: center;
+        }
+
+        .merge-sort-wrapper .info-panel {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .merge-sort-wrapper .info-panel h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .merge-sort-wrapper .info-panel p {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .merge-sort-wrapper .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .merge-sort-wrapper .speed-control input[type="range"] {
+            width: 150px;
+        }
+
+        .merge-sort-wrapper .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .merge-sort-wrapper .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .merge-sort-wrapper .legend-box {
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+        }
+    </style>
+
+    <div class="merge-sort-wrapper">
+    <div class="container">
+        <h1>🔄 Merge Sort Visualization</h1>
+        
+        <div class="controls">
+            <div class="input-group">
+                <input type="text" id="arrayInput" placeholder="e.g., 38,27,43,3,9,82,10" value="38,27,43,3,9,82,10">
+                <button class="btn-secondary" onclick="setCustomArray()">Set Array</button>
+            </div>
+            <button class="btn-secondary" onclick="generateRandomArray()">Random Array</button>
+            <button class="btn-primary" onclick="startSort()" id="sortBtn">Start Sort</button>
+            <button class="btn-secondary" onclick="togglePause()" id="pauseBtn" style="display: none;">Pause Sort</button>
+            <button class="btn-secondary" onclick="previousStep()" id="prevBtn" style="display: none;" disabled>Previous Step</button>
+            <button class="btn-secondary" onclick="nextStep()" id="nextBtn" style="display: none;" disabled>Next Step</button>
+            <button class="btn-secondary" onclick="reset()">Reset</button>
+            <div class="speed-control">
+                <label>Speed:</label>
+                <input type="range" id="speedSlider" min="100" max="2000" value="800" step="100">
+                <span id="speedLabel">800ms</span>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <span>Unsorted</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <span>Comparing</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                <span>Merging</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <span>Sorted</span>
+            </div>
+        </div>
+
+        <div class="visualization">
+            <div class="array-container" id="arrayContainer"></div>
+            <div class="merge-visualization" id="mergeViz" style="display: none;">
+                <div class="subarray">
+                    <h4>Left Subarray</h4>
+                    <div class="subarray-bars" id="leftSubarray"></div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="subarray">
+                    <h4>Right Subarray</h4>
+                    <div class="subarray-bars" id="rightSubarray"></div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="subarray">
+                    <h4>Result</h4>
+                    <div class="subarray-bars" id="resultSubarray"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>Current Step:</h3>
+            <p id="stepInfo">Click "Start Sort" to begin visualization</p>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        let array = [38, 27, 43, 3, 9, 82, 10];
+        let speed = 800;
+        let sorting = false;
+        let paused = false;
+        let pauseResolve = null;
+        let stepHistory = [];
+        let currentStepIndex = -1;
+        let stepForwardMode = false;
+
+        const arrayContainer = document.getElementById('arrayContainer');
+        const stepInfo = document.getElementById('stepInfo');
+        const sortBtn = document.getElementById('sortBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        const mergeViz = document.getElementById('mergeViz');
+        const leftSubarray = document.getElementById('leftSubarray');
+        const rightSubarray = document.getElementById('rightSubarray');
+        const resultSubarray = document.getElementById('resultSubarray');
+
+        speedSlider.addEventListener('input', (e) => {
+            speed = parseInt(e.target.value);
+            speedLabel.textContent = speed + 'ms';
+        });
+
+        function renderArray(arr = array, highlights = {}) {
+            arrayContainer.innerHTML = '';
+            const maxValue = Math.max(...arr);
+            const barWidth = Math.min(80, 800 / arr.length);
+            
+            arr.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const height = (value / maxValue) * 200;
+                bar.style.width = barWidth + 'px';
+                bar.style.height = height + 'px';
+                bar.textContent = value;
+                
+                if (highlights.comparing && highlights.comparing.includes(index)) {
+                    bar.classList.add('comparing');
+                }
+                if (highlights.merging && highlights.merging.includes(index)) {
+                    bar.classList.add('merging');
+                }
+                if (highlights.sorted && highlights.sorted.includes(index)) {
+                    bar.classList.add('sorted');
+                }
+                
+                arrayContainer.appendChild(bar);
+            });
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => {
+                setTimeout(async () => {
+                    // Check if we should auto-pause after one step
+                    if (stepForwardMode) {
+                        stepForwardMode = false;
+                        paused = true;
+                        pauseBtn.textContent = 'Resume Sort';
+                        pauseBtn.classList.remove('btn-secondary');
+                        pauseBtn.classList.add('btn-primary');
+                        prevBtn.disabled = (currentStepIndex === 0);
+                        nextBtn.disabled = false;
+                    }
+                    
+                    while (paused) {
+                        await new Promise(r => pauseResolve = r);
+                    }
+                    resolve();
+                }, ms);
+            });
+        }
+
+        function saveStep(state) {
+            // When paused and navigating backward, truncate future steps
+            if (paused && currentStepIndex < stepHistory.length - 1) {
+                stepHistory = stepHistory.slice(0, currentStepIndex + 1);
+            }
+            
+            // Only save if we're not navigating history or if paused
+            if (currentStepIndex === stepHistory.length - 1 || currentStepIndex === -1 || !paused) {
+                stepHistory.push(JSON.parse(JSON.stringify(state)));
+                currentStepIndex = stepHistory.length - 1;
+            }
+        }
+
+        function restoreStep(index) {
+            if (index < 0 || index >= stepHistory.length) return;
+            
+            const state = stepHistory[index];
+            currentStepIndex = index;
+            
+            // Restore array
+            array = [...state.array];
+            
+            // Restore visualization
+            if (state.mergeVizVisible) {
+                mergeViz.style.display = 'flex';
+                if (state.leftArr) renderSubarray(leftSubarray, state.leftArr, 'Left', state.leftPointer, state.leftPicked);
+                if (state.rightArr) renderSubarray(rightSubarray, state.rightArr, 'Right', state.rightPointer, state.rightPicked);
+                if (state.result) renderSubarray(resultSubarray, state.result, 'Result');
+            } else {
+                mergeViz.style.display = 'none';
+            }
+            
+            renderArray(array, state.highlights || {});
+            stepInfo.innerHTML = state.stepText;
+            
+            // Update button states
+            if (paused) {
+                prevBtn.disabled = (currentStepIndex === 0);
+                nextBtn.disabled = false; // Always enabled when paused
+            }
+        }
+
+        function previousStep() {
+            if (currentStepIndex > 0) {
+                restoreStep(currentStepIndex - 1);
+            }
+        }
+
+        function nextStep() {
+            if (paused) {
+                // If at the end of recorded history, resume to generate next step
+                if (currentStepIndex === stepHistory.length - 1) {
+                    stepForwardMode = true; // Enable auto-pause after one step
+                    togglePause(); // This will resume execution
+                } else if (currentStepIndex < stepHistory.length - 1) {
+                    restoreStep(currentStepIndex + 1);
+                }
+            }
+        }
+
+        function generateRandomArray() {
+            const size = 8 + Math.floor(Math.random() * 7);
+            array = Array.from({length: size}, () => Math.floor(Math.random() * 90) + 10);
+            renderArray();
+            stepInfo.textContent = 'New random array generated. Click "Start Sort" to begin.';
+        }
+
+        function setCustomArray() {
+            const input = document.getElementById('arrayInput').value;
+            const newArray = input.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+            if (newArray.length > 0) {
+                array = newArray;
+                renderArray();
+                stepInfo.textContent = 'Custom array set. Click "Start Sort" to begin.';
+            }
+        }
+
+        function reset() {
+            if (!sorting) {
+                mergeViz.style.display = 'none';
+                renderArray();
+                stepInfo.textContent = 'Array reset. Click "Start Sort" to begin.';
+            }
+        }
+
+        function togglePause() {
+            paused = !paused;
+            if (paused) {
+                pauseBtn.textContent = 'Resume Sort';
+                pauseBtn.classList.remove('btn-secondary');
+                pauseBtn.classList.add('btn-primary');
+                prevBtn.disabled = (currentStepIndex === 0);
+                nextBtn.disabled = false;
+            } else {
+                pauseBtn.textContent = 'Pause Sort';
+                pauseBtn.classList.remove('btn-primary');
+                pauseBtn.classList.add('btn-secondary');
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                if (pauseResolve) {
+                    pauseResolve();
+                    pauseResolve = null;
+                }
+            }
+        }
+
+        async function merge(arr, left, mid, right, tempArr) {
+            mergeViz.style.display = 'flex';
+            
+            const leftArr = arr.slice(left, mid + 1);
+            const rightArr = arr.slice(mid + 1, right + 1);
+            
+            // Render subarrays
+            renderSubarray(leftSubarray, leftArr, 'Left');
+            renderSubarray(rightSubarray, rightArr, 'Right');
+            renderSubarray(resultSubarray, [], 'Result');
+            
+            let i = 0;
+            let j = 0;
+            let k = left;
+            const result = [];
+
+            stepInfo.innerHTML = `<strong>Starting merge:</strong><br>Left subarray = [${leftArr.join(', ')}]<br>Right subarray = [${rightArr.join(', ')}]<br>Left pointer i=0, Right pointer j=0`;
+            saveStep({
+                array: [...arr],
+                stepText: stepInfo.innerHTML,
+                mergeVizVisible: true,
+                leftArr: [...leftArr],
+                rightArr: [...rightArr],
+                result: [...result],
+                leftPointer: -1,
+                rightPointer: -1,
+                leftPicked: -1,
+                rightPicked: -1
+            });
+            await sleep(speed);
+
+            while (i < leftArr.length && j < rightArr.length) {
+                renderSubarray(leftSubarray, leftArr, 'Left', i, -1);
+                renderSubarray(rightSubarray, rightArr, 'Right', j, -1);
+                
+                stepInfo.innerHTML = `<strong>Comparing:</strong><br>Left pointer i=${i} → Left[${i}] = ${leftArr[i]}<br>Right pointer j=${j} → Right[${j}] = ${rightArr[j]}<br>Which is smaller?`;
+                saveStep({
+                    array: [...arr],
+                    stepText: stepInfo.innerHTML,
+                    mergeVizVisible: true,
+                    leftArr: [...leftArr],
+                    rightArr: [...rightArr],
+                    result: [...result],
+                    leftPointer: i,
+                    rightPointer: j,
+                    leftPicked: -1,
+                    rightPicked: -1
+                });
+                await sleep(speed);
+
+                if (leftArr[i] <= rightArr[j]) {
+                    result.push(leftArr[i]);
+                    arr[k] = leftArr[i];
+                    stepInfo.innerHTML = `<strong>Decision:</strong><br>${leftArr[i]} ≤ ${rightArr[j]}<br>✓ Pick ${leftArr[i]} from left subarray<br>→ Move left pointer: i=${i} → i=${i+1}<br>→ Right pointer stays at j=${j}`;
+                    renderSubarray(leftSubarray, leftArr, 'Left', i, i);
+                    saveStep({
+                        array: [...arr],
+                        stepText: stepInfo.innerHTML,
+                        mergeVizVisible: true,
+                        leftArr: [...leftArr],
+                        rightArr: [...rightArr],
+                        result: [...result],
+                        leftPointer: i,
+                        rightPointer: j,
+                        leftPicked: i,
+                        rightPicked: -1
+                    });
+                    i++;
+                } else {
+                    result.push(rightArr[j]);
+                    arr[k] = rightArr[j];
+                    stepInfo.innerHTML = `<strong>Decision:</strong><br>${leftArr[i]} > ${rightArr[j]}<br>✓ Pick ${rightArr[j]} from right subarray<br>→ Move right pointer: j=${j} → j=${j+1}<br>→ Left pointer stays at i=${i}`;
+                    renderSubarray(rightSubarray, rightArr, 'Right', j, j);
+                    saveStep({
+                        array: [...arr],
+                        stepText: stepInfo.innerHTML,
+                        mergeVizVisible: true,
+                        leftArr: [...leftArr],
+                        rightArr: [...rightArr],
+                        result: [...result],
+                        leftPointer: i,
+                        rightPointer: j,
+                        leftPicked: -1,
+                        rightPicked: j
+                    });
+                    j++;
+                }
+                
+                renderSubarray(resultSubarray, result, 'Result');
+                stepInfo.innerHTML += `<br><strong>Result so far:</strong> [${result.join(', ')}]`;
+                k++;
+                await sleep(speed * 1.5);
+            }
+
+            while (i < leftArr.length) {
+                result.push(leftArr[i]);
+                arr[k] = leftArr[i];
+                renderSubarray(leftSubarray, leftArr, 'Left', i, i);
+                renderSubarray(resultSubarray, result, 'Result');
+                stepInfo.innerHTML = `<strong>Right subarray exhausted (j=${j} reached end)</strong><br>✓ Copy remaining element ${leftArr[i]} from left subarray<br>→ Move left pointer: i=${i} → i=${i+1}<br><strong>Result:</strong> [${result.join(', ')}]`;
+                saveStep({
+                    array: [...arr],
+                    stepText: stepInfo.innerHTML,
+                    mergeVizVisible: true,
+                    leftArr: [...leftArr],
+                    rightArr: [...rightArr],
+                    result: [...result],
+                    leftPointer: i,
+                    rightPointer: j,
+                    leftPicked: i,
+                    rightPicked: -1
+                });
+                i++;
+                k++;
+                await sleep(speed);
+            }
+
+            while (j < rightArr.length) {
+                result.push(rightArr[j]);
+                arr[k] = rightArr[j];
+                renderSubarray(rightSubarray, rightArr, 'Right', j, j);
+                renderSubarray(resultSubarray, result, 'Result');
+                stepInfo.innerHTML = `<strong>Left subarray exhausted (i=${i} reached end)</strong><br>✓ Copy remaining element ${rightArr[j]} from right subarray<br>→ Move right pointer: j=${j} → j=${j+1}<br><strong>Result:</strong> [${result.join(', ')}]`;
+                saveStep({
+                    array: [...arr],
+                    stepText: stepInfo.innerHTML,
+                    mergeVizVisible: true,
+                    leftArr: [...leftArr],
+                    rightArr: [...rightArr],
+                    result: [...result],
+                    leftPointer: i,
+                    rightPointer: j,
+                    leftPicked: -1,
+                    rightPicked: j
+                });
+                j++;
+                k++;
+                await sleep(speed);
+            }
+
+            stepInfo.innerHTML = `<strong>✅ Merge complete!</strong><br>Final pointers: i=${i}, j=${j}<br><strong>Merged result:</strong> [${result.join(', ')}]`;
+            renderSubarray(leftSubarray, leftArr, 'Left', -1, -1);
+            renderSubarray(rightSubarray, rightArr, 'Right', -1, -1);
+            saveStep({
+                array: [...arr],
+                stepText: stepInfo.innerHTML,
+                mergeVizVisible: true,
+                leftArr: [...leftArr],
+                rightArr: [...rightArr],
+                result: [...result],
+                leftPointer: -1,
+                rightPointer: -1,
+                leftPicked: -1,
+                rightPicked: -1
+            });
+            await sleep(speed * 1.5);
+
+            const sortedIndices = [];
+            for (let x = left; x <= right; x++) sortedIndices.push(x);
+            renderArray(arr, { sorted: sortedIndices });
+            saveStep({
+                array: [...arr],
+                stepText: stepInfo.innerHTML,
+                mergeVizVisible: false,
+                highlights: { sorted: sortedIndices }
+            });
+            await sleep(speed);
+            
+            mergeViz.style.display = 'none';
+        }
+
+        function renderSubarray(container, arr, label, pointerIdx = -1, pickedIdx = -1) {
+            container.innerHTML = '';
+            const maxValue = Math.max(...arr, 1);
+            
+            arr.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'mini-bar';
+                const height = (value / maxValue) * 80 + 20;
+                bar.style.height = height + 'px';
+                bar.textContent = value;
+                
+                if (index === pointerIdx) {
+                    if (label === 'Left') {
+                        bar.classList.add('active-left');
+                    } else if (label === 'Right') {
+                        bar.classList.add('active-right');
+                    }
+                    
+                    const pointer = document.createElement('div');
+                    pointer.className = 'pointer ' + label.toLowerCase();
+                    pointer.textContent = '👆';
+                    bar.appendChild(pointer);
+                }
+                
+                if (index === pickedIdx) {
+                    bar.classList.add('picked');
+                }
+                
+                container.appendChild(bar);
+            });
+        }
+
+        async function mergeSortHelper(arr, left, right, tempArr) {
+            if (left < right) {
+                const mid = Math.floor((left + right) / 2);
+
+                stepInfo.textContent = `Dividing array at position ${mid}: [${arr.slice(left, mid + 1).join(', ')}] | [${arr.slice(mid + 1, right + 1).join(', ')}]`;
+                renderArray(arr);
+                saveStep({
+                    array: [...arr],
+                    stepText: stepInfo.textContent,
+                    mergeVizVisible: false
+                });
+                await sleep(speed);
+
+                await mergeSortHelper(arr, left, mid, tempArr);
+                await mergeSortHelper(arr, mid + 1, right, tempArr);
+                await merge(arr, left, mid, right, tempArr);
+            }
+        }
+
+        async function startSort() {
+            if (sorting) return;
+            
+            sorting = true;
+            paused = false;
+            stepHistory = [];
+            currentStepIndex = -1;
+            sortBtn.disabled = true;
+            pauseBtn.style.display = 'inline-block';
+            prevBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'inline-block';
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            pauseBtn.textContent = 'Pause Sort';
+            pauseBtn.classList.remove('btn-primary');
+            pauseBtn.classList.add('btn-secondary');
+            
+            const tempArr = new Array(array.length);
+            await mergeSortHelper(array, 0, array.length - 1, tempArr);
+            
+            stepInfo.textContent = '✅ Sorting complete! Array is now fully sorted.';
+            const allIndices = array.map((_, i) => i);
+            renderArray(array, { sorted: allIndices });
+            saveStep({
+                array: [...array],
+                stepText: stepInfo.textContent,
+                mergeVizVisible: false,
+                highlights: { sorted: allIndices }
+            });
+            
+            sorting = false;
+            sortBtn.disabled = false;
+            pauseBtn.style.display = 'none';
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+
+        // Expose functions to global scope for onclick handlers
+        window.generateRandomArray = generateRandomArray;
+        window.setCustomArray = setCustomArray;
+        window.startSort = startSort;
+        window.togglePause = togglePause;
+        window.previousStep = previousStep;
+        window.nextStep = nextStep;
+        window.reset = reset;
+
+        renderArray();
+    })();
+    </script>
+    </div>
+    </div>
