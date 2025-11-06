@@ -29,6 +29,7 @@
             text-align: center;
             color: #333 !important;
             margin-bottom: 30px;
+            display: none; /* Hide the title */
         }
 
         .merge-sort-wrapper .controls {
@@ -40,18 +41,19 @@
         }
 
         .merge-sort-wrapper button {
-            padding: 12px 24px;
-            font-size: 16px;
+            padding: 6px 12px; /* Half of 12px 24px */
+            font-size: 14px; /* Smaller font */
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
+            color: white !important; /* White font */
         }
 
         .merge-sort-wrapper .btn-primary {
             background: #667eea;
-            color: white;
+            color: white !important; /* Ensure white font */
         }
 
         .merge-sort-wrapper .btn-primary:hover {
@@ -62,7 +64,7 @@
 
         .merge-sort-wrapper .btn-secondary {
             background: #48bb78;
-            color: white;
+            color: white !important; /* Ensure white font */
         }
 
         .merge-sort-wrapper .btn-secondary:hover {
@@ -106,33 +108,37 @@
             gap: 4px;
             margin: 20px 0;
             min-height: 250px;
+            width: fit-content; /* Fit content width */
+            margin-left: auto; /* Center the container */
+            margin-right: auto;
         }
 
         .merge-sort-wrapper .bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white; /* Unsorted color is white */
+            border: 2px solid #ddd; /* Add border to see white bars */
             border-radius: 4px 4px 0 0;
             position: relative;
             transition: all 0.3s;
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            color: white;
+            color: black !important; /* Black font for bar values */
             font-weight: bold;
             font-size: 14px;
             padding-bottom: 5px;
         }
 
         .merge-sort-wrapper .bar.comparing {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: #ebed6f; /* Comparing color */
             transform: scale(1.1);
         }
 
         .merge-sort-wrapper .bar.sorted {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #82e868; /* Sorted color */
         }
 
         .merge-sort-wrapper .bar.merging {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: #d278f0; /* Merging color */
         }
 
         .merge-sort-wrapper .pointer {
@@ -197,7 +203,7 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            color: white;
+            color: white !important; /* White font for mini-bar values */
             font-weight: bold;
             font-size: 12px;
             padding-bottom: 3px;
@@ -236,20 +242,43 @@
 
         .merge-sort-wrapper .info-panel {
             background: #edf2f7;
-            padding: 20px;
+            padding: 15px; /* Smaller padding */
             border-radius: 10px;
             margin-top: 20px;
+            display: grid; /* Use grid for 3 columns */
+            grid-template-columns: 2fr 1fr 1.5fr; /* Three columns: Current Step (wider), Legend, Controls */
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .merge-sort-wrapper .controls-side {
+            /* Third column - Controls */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .merge-sort-wrapper .button-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .merge-sort-wrapper .button-row button {
+            flex: 1;
         }
 
         .merge-sort-wrapper .info-panel h3 {
             color: #2d3748;
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* Smaller margin */
+            font-size: 16px; /* Smaller font */
         }
 
         .merge-sort-wrapper .info-panel p {
             color: #4a5568;
-            line-height: 1.6;
-            margin-bottom: 8px;
+            line-height: 1.5; /* Smaller line height */
+            margin-bottom: 6px; /* Smaller margin */
+            font-size: 14px; /* Smaller font */
         }
 
         .merge-sort-wrapper .speed-control {
@@ -264,10 +293,10 @@
 
         .merge-sort-wrapper .legend {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            flex-direction: column; /* Vertical layout */
+            gap: 8px; /* Smaller gap for vertical */
+            justify-content: flex-start;
+            margin-top: 15px;
         }
 
         .merge-sort-wrapper .legend-item {
@@ -287,41 +316,8 @@
     <div class="container">
         <h1>🔄 Merge Sort Visualization</h1>
         
-        <div class="controls">
-            <div class="input-group">
-                <input type="text" id="arrayInput" placeholder="e.g., 38,27,43,3,9,82,10" value="38,27,43,3,9,82,10">
-                <button class="btn-secondary" onclick="setCustomArray()">Set Array</button>
-            </div>
-            <button class="btn-secondary" onclick="generateRandomArray()">Random Array</button>
-            <button class="btn-primary" onclick="startSort()" id="sortBtn">Start Sort</button>
-            <button class="btn-secondary" onclick="togglePause()" id="pauseBtn" style="display: none;">Pause Sort</button>
-            <button class="btn-secondary" onclick="previousStep()" id="prevBtn" style="display: none;" disabled>Previous Step</button>
-            <button class="btn-secondary" onclick="nextStep()" id="nextBtn" style="display: none;" disabled>Next Step</button>
-            <button class="btn-secondary" onclick="reset()">Reset</button>
-            <div class="speed-control">
-                <label>Speed:</label>
-                <input type="range" id="speedSlider" min="100" max="2000" value="800" step="100">
-                <span id="speedLabel">800ms</span>
-            </div>
-        </div>
-
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                <span>Unsorted</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-                <span>Comparing</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
-                <span>Merging</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-                <span>Sorted</span>
-            </div>
+        <div class="controls" style="display: none;">
+            <!-- Controls moved to info-panel -->
         </div>
 
         <div class="visualization">
@@ -345,15 +341,66 @@
         </div>
 
         <div class="info-panel">
-            <h3>Current Step:</h3>
-            <p id="stepInfo">Click "Start Sort" to begin visualization</p>
+            <!-- First Column: Current Step -->
+            <div class="step-content">
+                <h3>Current Step:</h3>
+                <p id="stepInfo">Click "Start" to begin visualization</p>
+            </div>
+            
+            <!-- Second Column: Legend -->
+            <div class="legend-column">
+                <h3>Legend:</h3>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: white; border: 2px solid #ddd;"></div>
+                        <span>Unsorted</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #ebed6f;"></div>
+                        <span>Comparing</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #d278f0;"></div>
+                        <span>Merging</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #82e868;"></div>
+                        <span>Sorted</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Third Column: Controls -->
+            <div class="controls-side">
+                <div class="speed-control">
+                    <label>Speed:</label>
+                    <input type="range" id="speedSlider" min="100" max="5000" value="1500" step="100">
+                    <span id="speedLabel">1500ms</span>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="arrayInput" placeholder="e.g., 38,27,43,3,9,82,10" value="38,27,43,3,9,82,10">
+                    <button class="btn-secondary" onclick="setCustomArray()">Set Array</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn-secondary" onclick="generateRandomArray()">Random Array</button>
+                    <button class="btn-secondary" onclick="reset()">Reset</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn-primary" onclick="startSort()" id="sortBtn">Start</button>
+                    <button class="btn-secondary" onclick="togglePause()" id="pauseBtn" style="display: none;">Pause</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn-secondary" onclick="previousStep()" id="prevBtn" style="display: none;" disabled>Previous</button>
+                    <button class="btn-secondary" onclick="nextStep()" id="nextBtn" style="display: none;" disabled>Next</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
     (function() {
         let array = [38, 27, 43, 3, 9, 82, 10];
-        let speed = 800;
+        let speed = 1500; // Default speed is 1.5 seconds
         let sorting = false;
         let paused = false;
         let pauseResolve = null;
@@ -413,7 +460,7 @@
                     if (stepForwardMode) {
                         stepForwardMode = false;
                         paused = true;
-                        pauseBtn.textContent = 'Resume Sort';
+                        pauseBtn.textContent = 'Resume';
                         pauseBtn.classList.remove('btn-secondary');
                         pauseBtn.classList.add('btn-primary');
                         prevBtn.disabled = (currentStepIndex === 0);
@@ -492,7 +539,7 @@
             const size = 8 + Math.floor(Math.random() * 7);
             array = Array.from({length: size}, () => Math.floor(Math.random() * 90) + 10);
             renderArray();
-            stepInfo.textContent = 'New random array generated. Click "Start Sort" to begin.';
+            stepInfo.textContent = 'New random array generated. Click "Start" to begin.';
         }
 
         function setCustomArray() {
@@ -501,7 +548,7 @@
             if (newArray.length > 0) {
                 array = newArray;
                 renderArray();
-                stepInfo.textContent = 'Custom array set. Click "Start Sort" to begin.';
+                stepInfo.textContent = 'Custom array set. Click "Start" to begin.';
             }
         }
 
@@ -509,20 +556,20 @@
             if (!sorting) {
                 mergeViz.style.display = 'none';
                 renderArray();
-                stepInfo.textContent = 'Array reset. Click "Start Sort" to begin.';
+                stepInfo.textContent = 'Array reset. Click "Start" to begin.';
             }
         }
 
         function togglePause() {
             paused = !paused;
             if (paused) {
-                pauseBtn.textContent = 'Resume Sort';
+                pauseBtn.textContent = 'Resume';
                 pauseBtn.classList.remove('btn-secondary');
                 pauseBtn.classList.add('btn-primary');
                 prevBtn.disabled = (currentStepIndex === 0);
                 nextBtn.disabled = false;
             } else {
-                pauseBtn.textContent = 'Pause Sort';
+                pauseBtn.textContent = 'Pause';
                 pauseBtn.classList.remove('btn-primary');
                 pauseBtn.classList.add('btn-secondary');
                 prevBtn.disabled = true;
@@ -769,7 +816,7 @@
             nextBtn.style.display = 'inline-block';
             prevBtn.disabled = true;
             nextBtn.disabled = true;
-            pauseBtn.textContent = 'Pause Sort';
+            pauseBtn.textContent = 'Pause';
             pauseBtn.classList.remove('btn-primary');
             pauseBtn.classList.add('btn-secondary');
             
