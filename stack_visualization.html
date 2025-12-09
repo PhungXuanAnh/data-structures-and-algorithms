@@ -1,0 +1,690 @@
+<style>
+    .stack-viz-wrapper {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+    }
+    
+    .stack-viz-wrapper * {
+        color: #2c3e50 !important;
+        opacity: 1 !important;
+    }
+    
+    .stack-viz-wrapper h1 {
+        text-align: center;
+        color: #ffffff !important;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .stack-viz-wrapper .subtitle {
+        text-align: center;
+        color: #f0f0f0 !important;
+        margin-bottom: 30px;
+        font-size: 1.1em;
+    }
+    
+    .stack-viz-wrapper .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .stack-viz-wrapper .visualization-panel {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    
+    .stack-viz-wrapper h2 {
+        color: #667eea !important;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    .stack-viz-wrapper .clear-btn-top {
+        text-align: right;
+        margin-bottom: 20px;
+    }
+    
+    .stack-viz-wrapper .stack-operations {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .stack-viz-wrapper .operation-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .stack-viz-wrapper input {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #2c3e50 !important;
+        height: 46px;
+    }
+    
+    .stack-viz-wrapper .output-box {
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        background: #f8f9ff;
+        color: #2c3e50 !important;
+        font-weight: bold;
+        text-align: center;
+        height: 22px;
+        min-width: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+    }
+
+    .stack-viz-wrapper #popOutputDiagram {
+        margin-top: -40px;
+    }
+
+    .stack-viz-wrapper #peekOutputDiagram {
+        margin-top: -20px;
+    }
+
+    .stack-viz-wrapper .input-box {
+        padding: 12px;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        font-size: 16px;
+        background: #f8f9ff;
+        color: #2c3e50 !important;
+        font-weight: bold;
+        text-align: center;
+        height: 22px;
+        min-width: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+    }
+    
+    .stack-viz-wrapper button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white !important;
+        min-width: 100px;
+        height: 46px;
+    }
+    
+    .stack-viz-wrapper .btn-push {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .stack-viz-wrapper .btn-pop {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: -40;
+    }
+    
+    .stack-viz-wrapper .btn-peek {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        margin-top: -20;
+    }
+    
+    .stack-viz-wrapper .btn-clear {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    
+    
+    .stack-viz-wrapper button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .stack-viz-wrapper button:active {
+        transform: translateY(0);
+    }
+    
+    .stack-viz-wrapper .stack-display-area {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .stack-viz-wrapper .card {
+        background-color: #EAEAEA;
+        border-radius: 20px;
+        padding: 40px 50px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        display: inline-block;
+    }
+
+    .stack-viz-wrapper .diagram-layout {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto auto;
+        gap: 10px;
+        align-items: end;
+        margin-left: -100;
+    }
+
+    .stack-viz-wrapper .label {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #000 !important;
+    }
+
+    .stack-viz-wrapper .push-column {
+        grid-column: 1 / 3;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding-right: 10px;
+        justify-self: end;
+        margin-bottom: 10px;
+        margin-right: 20px;
+    }
+
+    .stack-viz-wrapper .push-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .stack-viz-wrapper .push-arrow-container {
+        position: relative;
+        width: 60px;
+        height: 40px;
+    }
+
+    .stack-viz-wrapper .push-line {
+        position: absolute;
+        top: 5px;
+        right: 0;
+        width: 50px;
+        height: 35px;
+        border-top: 2px solid black;
+        border-right: 2px solid black;
+    }
+
+    .stack-viz-wrapper .push-origin {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        border: 2px solid black;
+        border-radius: 50%;
+        background-color: #EAEAEA;
+    }
+
+    .stack-viz-wrapper .right-column {
+        grid-column: 3 / 5;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-self: start;
+        margin-bottom: 10px;
+        margin-left: 20px;
+    }
+
+    .stack-viz-wrapper .pop-container {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .stack-viz-wrapper .pop-arrow-container {
+        position: relative;
+        width: 50px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .stack-viz-wrapper .pop-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 35px;
+        border-left: 2px solid black;
+        border-top: 2px solid black;
+    }
+
+    .stack-viz-wrapper .stack-container {
+        grid-column: 2 / 4;
+        grid-row: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        justify-self: center;
+        max-height: 245px;
+        overflow-y: auto;
+    }
+
+    .stack-viz-wrapper .stack-bar,
+    .stack-viz-wrapper .stack-item {
+        width: 120px;
+        height: 35px;
+        background-color: #EC3679;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white !important;
+        font-weight: bold;
+        font-size: 16px;
+        animation: slideIn 0.3s ease;
+    }
+
+    .stack-viz-wrapper .stack-item.popping {
+        animation: slideOut 0.3s ease;
+    }
+
+    .stack-viz-wrapper .top-arrow-container {
+        grid-column: 3 / 5;
+        grid-row: 2;
+        display: flex;
+        align-items: flex-start;
+        align-self: start;
+        padding-top: 10px;
+        justify-self: start;
+        margin-left: 40px;
+    }
+
+    .stack-viz-wrapper .top-arrow-line {
+        position: relative;
+        width: 40px;
+        height: 2px;
+        background-color: black;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .stack-viz-wrapper .arrow-left {
+        border-width: 5px 8px 5px 0;
+        border-color: transparent black transparent transparent;
+        left: -8px;
+    }
+
+    .stack-viz-wrapper .arrowhead {
+        width: 0;
+        height: 0;
+        position: absolute;
+        border-style: solid;
+    }
+
+    .stack-viz-wrapper .arrow-down {
+        border-width: 8px 5px 0 5px;
+        border-color: black transparent transparent transparent;
+        bottom: -8px;
+        right: -6px;
+    }
+
+    .stack-viz-wrapper .arrow-right {
+        border-width: 5px 0 5px 8px;
+        border-color: transparent transparent transparent black;
+        top: -6px;
+        right: -8px;
+    }
+
+    .stack-viz-wrapper .arrow-left-solid {
+        width: 0;
+        height: 0;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        border-right: 18px solid black;
+        margin-right: 8px;
+    }
+
+    .stack-viz-wrapper .placeholder {
+        min-height: 1px;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+    
+    .stack-viz-wrapper .info-box {
+        background: #e8eaf6;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        border-left: 5px solid #667eea;
+    }
+    
+    .stack-viz-wrapper .info-box p {
+        margin: 8px 0;
+        color: #2c3e50 !important;
+        font-size: 16px;
+    }
+    
+    .stack-viz-wrapper .message {
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 15px;
+        text-align: center;
+        font-weight: bold;
+        color: white !important;
+        display: none;
+    }
+    
+    .stack-viz-wrapper .message.success {
+        background: #4caf50;
+        display: block;
+    }
+    
+    .stack-viz-wrapper .message.error {
+        background: #f44336;
+        display: block;
+    }
+    
+    .stack-viz-wrapper .message.info {
+        background: #2196f3;
+        display: block;
+    }
+    
+    .stack-viz-wrapper .complexity-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    .stack-viz-wrapper .complexity-table th,
+    .stack-viz-wrapper .complexity-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .stack-viz-wrapper .complexity-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    
+    .stack-viz-wrapper .complexity-table td {
+        background: #f8f9ff;
+        color: #2c3e50 !important;
+        font-size: 16px;
+    }
+    
+    .stack-viz-wrapper .complexity {
+        background: #4caf50;
+        color: white !important;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        display: inline-block;
+    }
+    
+    .stack-viz-wrapper .empty-state {
+        color: #999 !important;
+        font-style: italic;
+        text-align: center;
+        padding: 40px;
+        margin: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .stack-viz-wrapper .container {
+            grid-template-columns: 1fr;
+        }
+        
+        .stack-viz-wrapper .top-label {
+            position: static;
+            transform: none;
+            margin-top: 5px;
+            display: inline-block;
+        }
+    }
+</style>
+
+<div class="stack-viz-wrapper">
+    <h1>🔄 Stack Data Structure Visualization</h1>
+    <p class="subtitle">Interactive demonstration of LIFO (Last-In-First-Out) operations</p>
+    
+    <div class="container">
+        <div class="visualization-panel">
+            <h2>Stack Operations</h2>
+            
+            <div id="message" class="message"></div>
+            
+            <div class="stack-display-area">
+                <div class="card">
+                    <div class="diagram-layout">
+                        
+                        <div class="push-column">
+                            <div class="push-row">
+                                <div class="input-box" id="pushInputBox">-</div>
+                                <button class="btn-push" id="pushBtnDiagram">Push</button>
+                            </div>
+                            <div class="push-arrow-container">
+                                <div class="push-origin"></div>
+                                <div class="push-line">
+                                    <div class="arrowhead arrow-down"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="right-column">
+                            <div class="pop-container">
+                                <div class="pop-arrow-container">
+                                    <div class="pop-line">
+                                         <div class="arrowhead arrow-right"></div>
+                                    </div>
+                                </div>
+                                <button class="btn-pop" id="popBtnDiagram">Pop</button>
+                                <div class="output-box" id="popOutputDiagram">-</div>
+                            </div>
+                        </div>
+
+                        <div class="stack-container" id="stackContainer">
+                            <div class="empty-state">Stack is empty</div>
+                        </div>
+
+                        <div class="top-arrow-container" id="topIndicator">
+                            <div class="top-arrow-line">
+                                <div class="arrowhead arrow-left"></div>
+                            </div>
+                            <button class="btn-peek" id="peekBtnDiagram">Top</button>
+                            <div class="output-box" id="peekOutputDiagram">-</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <p><strong>Size:</strong> <span id="stackSize">0</span></p>
+                <p><strong>Top Element:</strong> <span id="topElement">-</span></p>
+                <p><strong>Is Empty:</strong> <span id="isEmpty">Yes</span></p>
+            </div>
+        </div>
+        
+        <div class="visualization-panel">
+            <h2>Time Complexity Analysis</h2>
+            
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Time Complexity</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Push</strong></td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Add element to top</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pop</strong></td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Remove top element</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Peek/Top</strong></td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>View top element</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isEmpty</strong></td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Check if empty</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Size</strong></td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Get element count</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="info-box" style="margin-top: 30px;">
+                <h3 style="color: #667eea !important; margin-top: 0;">Key Characteristics</h3>
+                <p><strong>Principle:</strong> LIFO (Last-In-First-Out)</p>
+                <p><strong>Access:</strong> Only top element accessible</p>
+                <p><strong>Use Cases:</strong> Function calls, undo/redo, expression evaluation, backtracking</p>
+                <p><strong>Implementation:</strong> Array or Linked List</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const stack = [];
+    
+    function updateDisplay() {
+        const container = document.getElementById('stackContainer');
+        container.innerHTML = '';
+        
+        if (stack.length === 0) {
+            container.innerHTML = '<div class="empty-state">Stack is empty</div>';
+        } else {
+            for (let i = stack.length - 1; i >= 0; i--) {
+                const item = document.createElement('div');
+                item.className = 'stack-item';
+                item.textContent = stack[i];
+                container.appendChild(item);
+            }
+        }
+        
+        document.getElementById('stackSize').textContent = stack.length;
+        document.getElementById('topElement').textContent = stack.length > 0 ? stack[stack.length - 1] : '-';
+        document.getElementById('isEmpty').textContent = stack.length === 0 ? 'Yes' : 'No';
+    }
+    
+    function showMessage(text, type) {
+        // Message display removed as requested
+    }
+    
+    function generateRandomValue() {
+        const randomNum = Math.floor(Math.random() * 100) + 1;
+        document.getElementById('pushInputBox').textContent = randomNum.toString();
+    }
+
+    function push() {
+        const value = document.getElementById('pushInputBox').textContent;
+        if (value === '-') {
+            generateRandomValue();
+            return;
+        }
+        
+        stack.push(value);
+        updateDisplay();
+        generateRandomValue();
+    }
+    
+    function pop() {
+        if (stack.length === 0) {
+            document.getElementById('popOutputDiagram').textContent = 'Empty!';
+            setTimeout(() => {
+                document.getElementById('popOutputDiagram').textContent = '-';
+            }, 2000);
+            return;
+        }
+        
+        const items = document.querySelectorAll('.stack-item');
+        const topItem = items[items.length - 1];
+        if (topItem) {
+            topItem.classList.add('popping');
+        }
+        
+        setTimeout(() => {
+            const value = stack.pop();
+            updateDisplay();
+            document.getElementById('popOutputDiagram').textContent = value;
+        }, 300);
+    }
+    
+    function peek() {
+        if (stack.length === 0) {
+            document.getElementById('peekOutputDiagram').textContent = 'Empty!';
+            setTimeout(() => {
+                document.getElementById('peekOutputDiagram').textContent = '-';
+            }, 2000);
+            return;
+        }
+        
+        const value = stack[stack.length - 1];
+        document.getElementById('peekOutputDiagram').textContent = value;
+    }
+    
+    
+    function initializeStack() {
+        for (let i = 0; i < 3; i++) {
+            const randomNum = Math.floor(Math.random() * 100) + 1;
+            stack.push(randomNum.toString());
+        }
+    }
+
+    document.getElementById('pushBtnDiagram').addEventListener('click', push);
+    document.getElementById('popBtnDiagram').addEventListener('click', pop);
+    document.getElementById('peekBtnDiagram').addEventListener('click', peek);
+    
+    initializeStack();
+    generateRandomValue();
+    updateDisplay();
+})();
+</script>
