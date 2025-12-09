@@ -1,0 +1,714 @@
+<style>
+    .queue-viz-wrapper {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+    }
+
+    .queue-viz-wrapper * {
+        color: #2c3e50 !important;
+        opacity: 1 !important;
+    }
+
+    .queue-viz-wrapper h1 {
+        text-align: center;
+        color: #ffffff !important;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .queue-viz-wrapper .subtitle {
+        text-align: center;
+        color: #f0f0f0 !important;
+        margin-bottom: 30px;
+        font-size: 1.1em;
+    }
+
+    .queue-viz-wrapper .content-container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .queue-viz-wrapper .key-concepts {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        border-left: 5px solid #667eea;
+    }
+
+    .queue-viz-wrapper .key-concepts h3 {
+        color: #667eea !important;
+        margin-top: 0;
+        font-size: 1.3em;
+    }
+
+    .queue-viz-wrapper .concept-item {
+        margin: 10px 0;
+        padding: 8px;
+        background: white;
+        border-radius: 5px;
+    }
+
+    .queue-viz-wrapper .concept-label {
+        font-weight: bold;
+        color: #764ba2 !important;
+    }
+
+    .queue-viz-wrapper .ticket-counter {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .queue-viz-wrapper .counter-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
+
+    .queue-viz-wrapper .queue-container {
+        margin: 30px 0;
+        position: relative;
+    }
+
+    .queue-viz-wrapper .status-message-row {
+        display: flex;
+        gap: 20px;
+        align-items: stretch;
+        margin-bottom: 15px;
+    }
+
+    .queue-viz-wrapper .message-display {
+        flex: 1;
+        display: block;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+        background: #e8f5e9;
+        color: #2e7d32;
+        min-height: 20px;
+    }
+
+    .queue-viz-wrapper .status {
+        flex: 1;
+        background: #e3f2fd;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.1em;
+        border-left: 5px solid #2196f3;
+    }
+
+    .queue-viz-wrapper .queue-scroll-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 20px 10px;
+        background: #F5FFFA;
+        /* Mint cream background from queue_diagram */
+        border-radius: 30px;
+        border: 1px solid #E0E0E0;
+        position: relative;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        height: 320px;
+    }
+
+    .queue-viz-wrapper .queue-scroll-container::-webkit-scrollbar {
+        height: 12px;
+    }
+
+    .queue-viz-wrapper .queue-scroll-container::-webkit-scrollbar-track {
+        background: #ecf0f1;
+        border-radius: 10px;
+    }
+
+    .queue-viz-wrapper .queue-scroll-container::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+    }
+
+    .queue-viz-wrapper .queue-scroll-container::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+
+    .queue-viz-wrapper .queue-visualization-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 50px 80px;
+    }
+
+    /* --- Common Styles for the Data Nodes (The squares) - from queue_diagram --- */
+    .queue-viz-wrapper .node {
+        width: 50px;
+        height: 40px;
+        background-color: #98FB98;
+        /* Light Green */
+        border: 1px solid #2E8B57;
+        /* Sea Green border */
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+        color: #333 !important;
+        font-size: 14px;
+        z-index: 2;
+    }
+
+    /* --- Left Column: Dequeue + Peak sections --- */
+    .queue-viz-wrapper .left-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 30px;
+        gap: 20px;
+    }
+
+    /* --- Left Section: Dequeue - from queue_diagram --- */
+    .queue-viz-wrapper .dequeue-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+    .queue-viz-wrapper .dequeue-section .dequeue-label {
+        position: absolute;
+        left: -90px;
+        top: 10px;
+        font-weight: 700;
+        color: white !important;
+        font-size: 14px;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        padding: 10px 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .queue-viz-wrapper .dequeue-section .dequeue-label:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .queue-viz-wrapper .dequeue-section .node {
+        background-color: #ffcccc;
+        border: 1px solid #c0392b;
+    }
+
+    .queue-viz-wrapper .dequeue-section .arrow-path {
+        stroke: #c0392b;
+    }
+
+    .queue-viz-wrapper .dequeue-section .arrow-head {
+        fill: #c0392b;
+    }
+
+    /* --- Middle Section: The Queue Array - from queue_diagram --- */
+    .queue-viz-wrapper .queue-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-top: -40px;
+    }
+
+    .queue-viz-wrapper .labels-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #004d26 !important;
+        padding: 0 2px;
+    }
+
+    .queue-viz-wrapper .queue-array {
+        display: flex;
+        gap: 2px;
+    }
+
+    /* --- Right Section: Enqueue - from queue_diagram --- */
+    .queue-viz-wrapper .enqueue-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: 20px;
+        position: relative;
+        bottom: 10px;
+        right: -0.1px;
+        top: -40px;
+    }
+
+    .queue-viz-wrapper .enqueue-section .enqueue-label {
+        position: absolute;
+        right: -90px;
+        bottom: 10px;
+        font-weight: 700;
+        color: white !important;
+        font-size: 14px;
+        background: linear-gradient(135deg, #f39c12 0%, #d4a017 100%);
+        padding: 10px 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .queue-viz-wrapper .enqueue-section .enqueue-label:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .queue-viz-wrapper .enqueue-section .node {
+        background-color: #fff3cd;
+        border: 1px solid #d4a017;
+    }
+
+    .queue-viz-wrapper .enqueue-section .arrow-path {
+        stroke: #d4a017;
+    }
+
+    .queue-viz-wrapper .enqueue-section .arrow-head {
+        fill: #d4a017;
+    }
+
+    /* --- SVG Arrow Styling - from queue_diagram --- */
+    .queue-viz-wrapper svg.arrow {
+        overflow: visible;
+    }
+
+    .queue-viz-wrapper .arrow-path {
+        fill: none;
+        stroke: #004d26;
+        stroke-width: 8;
+        stroke-linecap: round;
+    }
+
+    .queue-viz-wrapper .arrow-head {
+        fill: #004d26;
+    }
+
+    .queue-viz-wrapper .controls {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 30px 0;
+    }
+
+    .queue-viz-wrapper button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .queue-viz-wrapper button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .queue-viz-wrapper button:active {
+        transform: translateY(0);
+    }
+
+    .queue-viz-wrapper button:disabled {
+        background: #bdc3c7 !important;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .queue-viz-wrapper .operations-table {
+        margin: 30px 0;
+        overflow-x: auto;
+    }
+
+    .queue-viz-wrapper table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .queue-viz-wrapper th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        padding: 15px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .queue-viz-wrapper td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ecf0f1;
+    }
+
+    .queue-viz-wrapper tr:last-child td {
+        border-bottom: none;
+    }
+
+    .queue-viz-wrapper tr:hover {
+        background: #f8f9fa;
+    }
+
+    .queue-viz-wrapper .complexity {
+        background: #d4edda;
+        color: #155724 !important;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    .queue-viz-wrapper .status-label {
+        font-weight: bold;
+        color: #2196f3 !important;
+    }
+
+    /* Peak Section Styles */
+    .queue-viz-wrapper .peak-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+    .queue-viz-wrapper .peak-section .peak-label {
+        position: absolute;
+        left: -85px;
+        top: 55px;
+        font-weight: 700;
+        color: white !important;
+        font-size: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 10px 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .queue-viz-wrapper .peak-section .peak-label:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .queue-viz-wrapper .peak-section .node {
+        background-color: #e8f5e9;
+        border: 1px solid #667eea;
+    }
+
+    .queue-viz-wrapper .peak-section .arrow-path {
+        stroke: #667eea;
+    }
+
+    .queue-viz-wrapper .peak-section .arrow-head {
+        fill: #667eea;
+    }
+</style>
+
+<div class="queue-viz-wrapper">
+    <h1>🎫 Queue Data Structure</h1>
+    <p class="subtitle">Ticket Counter Simulation - First-In-First-Out (FIFO)</p>
+
+    <div class="content-container">
+        <div class="key-concepts">
+            <h3>📚 Key Characteristics</h3>
+            <div class="concept-item">
+                <span class="concept-label">Principle:</span> First-In-First-Out (FIFO) - First person to join is first
+                to be served
+            </div>
+            <div class="concept-item">
+                <span class="concept-label">Front:</span> Where elements are removed (dequeue) - people get served here
+            </div>
+            <div class="concept-item">
+                <span class="concept-label">Rear:</span> Where elements are added (enqueue) - new people join here
+            </div>
+            <div class="concept-item">
+                <span class="concept-label">Order:</span> Elements maintain their arrival sequence
+            </div>
+        </div>
+
+        <div class="queue-container">
+            <div class="queue-scroll-container">
+                <div class="queue-visualization-container">
+
+                    <!-- Left Column: Peak + Dequeue sections -->
+                    <div class="left-column">
+                        <!-- Peak Section: View front without removing -->
+                        <div class="peak-section">
+                            <button class="peak-label" id="peakLabelBtn">👁️ Peak</button>
+
+                            <div id="peakBox" class="node" style="margin-bottom: 10px;">👁️</div>
+
+                            <svg class="arrow" width="60" height="60"
+                                style="margin-right: -40px; margin-top: -5px; z-index: 1;">
+                                <path d="M 65 50 L 25 50 Q 10 50 10 35 L 10 15" class="arrow-path" />
+                                <polygon points="0,18 20,18 10,2" class="arrow-head" />
+                            </svg>
+                        </div>
+
+                        <!-- Dequeue Section -->
+                        <div class="dequeue-section">
+                            <button class="dequeue-label" id="dequeueLabelBtn">Dequeue</button>
+
+                            <svg class="arrow" width="60" height="60"
+                                style="margin-right: -40px; margin-bottom: -5px; z-index: 1;">
+                                <path d="M 65 10 L 25 10 Q 10 10 10 25 L 10 45" class="arrow-path" />
+                                <polygon points="0,42 20,42 10,58" class="arrow-head" />
+                            </svg>
+
+                            <div id="dequeueBox" class="node" style="margin-top: 10px;">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Section: Queue Array - matching queue_diagram.html -->
+                    <div class="queue-wrapper">
+                        <div class="labels-row">
+                            <span style="margin-left: 5px; color: #c0392b !important;">Front<br />Head</span>
+                            <span style="margin-right: 5px; color: #d4a017 !important;">Back<br />Tail<br />Rear</span>
+                        </div>
+
+                        <div id="queueDisplay" class="queue-array">
+                            <!-- Queue items will be inserted here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right Section: Enqueue - matching queue_diagram.html -->
+                    <div class="enqueue-section">
+                        <button class="enqueue-label" id="enqueueLabelBtn">Enqueue</button>
+
+                        <div id="enqueueBox" class="node" style="margin-bottom: 10px; margin-top: -10px;">+</div>
+
+                        <svg class="arrow" width="60" height="70" style="margin-left: -40px; z-index: 1;">
+                            <path d="M 50 0 L 50 40 Q 50 55 35 55 L 15 55" class="arrow-path" />
+                            <polygon points="18,45 18,65 2,55" class="arrow-head" />
+                        </svg>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="status-message-row">
+            <div class="status">
+                <span class="status-label">Queue Size:</span> <span id="queueSize">0</span> |
+                <span class="status-label">Front:</span> <span id="frontPerson">None</span> |
+                <span class="status-label">Rear:</span> <span id="rearPerson">None</span>
+            </div>
+            <div id="messageDisplay" class="message-display"></div>
+        </div>
+
+        <div class="operations-table">
+            <h3 style="color: #667eea !important; margin-bottom: 15px;">⚡ Queue Operations & Time Complexity</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Description</th>
+                        <th>Time Complexity</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Enqueue</strong></td>
+                        <td>Add an element to the rear of the queue</td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>New customer joins the line</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dequeue</strong></td>
+                        <td>Remove and return the front element</td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Customer gets served and leaves</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Peek/Front</strong></td>
+                        <td>View the front element without removing</td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>See who's next without serving</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isEmpty</strong></td>
+                        <td>Check if queue has no elements</td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Check if anyone is waiting</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Size</strong></td>
+                        <td>Get the number of elements in queue</td>
+                        <td><span class="complexity">O(1)</span></td>
+                        <td>Count how many people are waiting</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        let nextNumber = 1;
+        let queue = [];
+        let dequeuedValue = null;
+
+        function updateNextPersonDisplay() {
+            const enqueueBox = document.getElementById('enqueueBox');
+            enqueueBox.textContent = nextNumber;
+        }
+
+        function updateDisplay() {
+            const queueDisplay = document.getElementById('queueDisplay');
+            const queueSize = document.getElementById('queueSize');
+            const frontPerson = document.getElementById('frontPerson');
+            const rearPerson = document.getElementById('rearPerson');
+            const dequeueBox = document.getElementById('dequeueBox');
+
+            // Update dequeue box - show dequeued number or dash
+            if (dequeuedValue !== null) {
+                dequeueBox.textContent = dequeuedValue;
+            } else {
+                dequeueBox.textContent = '-';
+            }
+
+            if (queue.length === 0) {
+                queueDisplay.innerHTML = '<div class="node" style="opacity: 0.5;">Empty</div>';
+                frontPerson.textContent = 'None';
+                rearPerson.textContent = 'None';
+            } else {
+                // Create nodes with numbers
+                queueDisplay.innerHTML = queue.map((num, index) => {
+                    return `<div class="node">${num}</div>`;
+                }).join('');
+                frontPerson.textContent = queue[0];
+                rearPerson.textContent = queue[queue.length - 1];
+            }
+
+            queueSize.textContent = queue.length;
+        }
+
+        function scrollToFront() {
+            const scrollContainer = document.querySelector('.queue-scroll-container');
+            if (scrollContainer) {
+                scrollContainer.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function scrollToRear() {
+            const scrollContainer = document.querySelector('.queue-scroll-container');
+            if (scrollContainer) {
+                scrollContainer.scrollTo({
+                    left: scrollContainer.scrollWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function enqueue() {
+            const num = nextNumber;
+            nextNumber++;
+            queue.push(num);
+            updateNextPersonDisplay();
+            updateDisplay();
+            setTimeout(scrollToRear, 100);
+            showMessage(`✅ ${num} joined the queue at the rear`, 'success');
+        }
+
+        function dequeue() {
+            if (queue.length === 0) {
+                showMessage('❌ Queue is empty! No one to serve.', 'error');
+                return;
+            }
+            dequeuedValue = queue.shift();
+            updateDisplay();
+            setTimeout(scrollToFront, 100);
+            showMessage(`🎫 ${dequeuedValue} was served and left the queue from the front`, 'success');
+
+            // Clear dequeued value after 2 seconds
+            setTimeout(() => {
+                dequeuedValue = null;
+                updateDisplay();
+            }, 2000);
+        }
+
+        function peek() {
+            const peakBox = document.getElementById('peakBox');
+            if (queue.length === 0) {
+                showMessage('❌ Queue is empty! No one at the front.', 'error');
+                peakBox.textContent = '-';
+                return;
+            }
+            scrollToFront();
+            peakBox.textContent = queue[0];
+            showMessage(`👁️ Next to be served: ${queue[0]}`, 'info');
+
+            // Reset peakBox after 2 seconds
+            setTimeout(() => {
+                peakBox.textContent = '👁️';
+            }, 2000);
+        }
+
+        function clearQueue() {
+            queue = [];
+            nextNumber = 1;
+            dequeuedValue = null;
+            updateNextPersonDisplay();
+            updateDisplay();
+            showMessage('🗑️ Queue cleared!', 'info');
+        }
+
+        function showMessage(message, type) {
+            const messageDisplay = document.getElementById('messageDisplay');
+
+            const colors = {
+                success: '#d4edda',
+                error: '#f8d7da',
+                info: '#d1ecf1'
+            };
+
+            const textColors = {
+                success: '#155724',
+                error: '#721c24',
+                info: '#0c5460'
+            };
+
+            messageDisplay.textContent = message;
+            messageDisplay.style.setProperty('background', colors[type], 'important');
+            messageDisplay.style.setProperty('color', textColors[type], 'important');
+            messageDisplay.style.display = 'block';
+        }
+
+        // Event listeners for the label buttons
+        document.getElementById('enqueueLabelBtn').addEventListener('click', enqueue);
+        document.getElementById('dequeueLabelBtn').addEventListener('click', dequeue);
+        document.getElementById('peakLabelBtn').addEventListener('click', peek);
+
+        updateNextPersonDisplay();
+        updateDisplay();
+    })();
+</script>
