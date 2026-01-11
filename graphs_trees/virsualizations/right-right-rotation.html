@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVL Tree Right-Right (RR) Rotation Animation</title>
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            margin: 20px;
+        }
+
+        .svgDataText {
+            font-family: "Roboto Mono", monospace;
+            fill: black;
+            font-size: 20px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .svgBalFac {
+            font-family: "Roboto Mono", monospace;
+            fill: black;
+            font-size: 16px;
+            opacity: 0;
+        }
+
+        .node {
+            stroke: black;
+            stroke-width: 1;
+            fill: gainsboro;
+        }
+
+        .branch {
+            stroke: black;
+            stroke-width: 1;
+            fill: black;
+        }
+
+        #arrowheadRed {
+            stroke: red;
+            fill: red;
+        }
+
+        #arrowhead line {
+            stroke: black;
+            fill: black;
+        }
+
+        .hidden-svg {
+            position: absolute;
+            left: -9999px;
+            width: 0;
+            height: 0;
+        }
+
+        .divAnim {
+            display: inline-block;
+            border: solid black 1px;
+            margin: 20px 0;
+            width: 367px;
+            max-width: 100%;
+        }
+
+        .divAnim svg {
+            width: 367px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .divAnim button {
+            display: block;
+            margin: 12px auto;
+        }
+
+        .divAnim line,
+        .divAnim .arcLeft,
+        .divAnim .arcRight {
+            opacity: 0;
+        }
+
+        .redText {
+            fill: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>The Right-Right (RR) Case</h2>
+    <p>A Right-Right case happens when a node is unbalanced and right heavy, and the right child node is also right
+        heavy.</p>
+    <p>A single left rotation at the unbalanced node is enough to restore balance in the RR case.</p>
+
+    <!-- SVG Definitions for arrowheads -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="hidden-svg">
+        <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="14" refX="0" refY="7" orient="auto"
+                markerUnits="userSpaceOnUse">
+                <line x1="0.5" y1="0.5" x2="7.5" y2="7.5" stroke-width="1.5"></line>
+                <line x1="0" y1="7" x2="6" y2="7" stroke-width="1"></line>
+                <line x1="0.5" y1="13.5" x2="7.5" y2="6.5" stroke-width="1.5"></line>
+            </marker>
+            <marker id="arrowheadRed" markerWidth="8" markerHeight="14" refX="0" refY="7" orient="auto"
+                markerUnits="userSpaceOnUse">
+                <line x1="0.5" y1="0.5" x2="7.5" y2="7.5" stroke-width="1.5"></line>
+                <line x1="0" y1="7" x2="6" y2="7" stroke-width="1"></line>
+                <line x1="0.5" y1="13.5" x2="7.5" y2="6.5" stroke-width="1.5"></line>
+            </marker>
+        </defs>
+    </svg>
+
+    <div id="divAnimRR" class="divAnim">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 220">
+            <path d="M 4 17 A 30 30 0 0 1 51 11" fill="none" stroke="red" stroke-width="1" class="arcRight"
+                transform="translate(188,1)" marker-end="url(#arrowheadRed)"></path>
+            <path d="M 56 17 A 30 30 0 0 0 9 11" fill="none" stroke="red" stroke-width="1" class="arcLeft"
+                transform="translate(187,1)" marker-end="url(#arrowheadRed)" style="opacity: 0;"></path>
+
+            <!-- '10' node (A) -->
+            <g class="child leaf node10" style="transform: translateY(70px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 1;">+1</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">10</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line1" marker-end="url(#arrowhead)"
+                style="transform: translateX(230px) translateY(53px); opacity: 1;"></line>
+
+            <!-- '20' node (B) -->
+            <g class="child leaf node20" style="transform: translateX(60px) translateY(120px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 1;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">20</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line2" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '30' node (D) -->
+            <g class="child leaf node30" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">30</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line3" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '25' node (C) -->
+            <g class="child leaf node25" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">25</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line4" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '40' node (E) -->
+            <g class="child leaf node40" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">40</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line5" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '50' node (F) -->
+            <g class="child leaf node50" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">50</text>
+            </g>
+
+        </svg>
+        <button onclick="tlRR.play()">Insert 30</button>
+    </div>
+
+    <p>The RR case happens two times in the animation above:</p>
+    <ol>
+        <li>When node 30 is inserted, 10 becomes unbalanced, and both 10 and 20 are right heavy. A left rotation at node
+            10 restores the tree balance.</li>
+        <li>After nodes 40, 25 and 50 are inserted, node 20 becomes unbalanced. This is an RR case because both node 20
+            and its right child node 30 are right heavy. A left rotation restores the tree balance.</li>
+    </ol>
+
+    <!-- Anime.js library -->
+    <script src="../DSA AVL Trees_files/anime.min.js"></script>
+
+    <script>
+        // Create timeline.
+        // Put pause() after every new animation is done.
+        // Button resumes the timeline by calling tlRR.play().
+        let tlRR;
+        let playBtnRR = document.querySelector('#divAnimRR button');
+
+        tlRR = anime.timeline({
+            autoplay: true,
+            duration: 500,
+            easing: 'easeInOutCirc',
+            loop: false
+        });
+
+        tlRR.add({
+            targets: '#divAnimRR .node10',
+            translateY: 70,
+            duration: 10,
+            begin: function (anim) {
+                playBtnRR.disabled = true;
+                playBtnRR.innerHTML = 'Insert 30';
+                let allBalFac = document.querySelectorAll('#divAnimRR .svgBalFac');
+                for (let i = 0; i < allBalFac.length; i++) {
+                    allBalFac[i].innerHTML = '0';
+                }
+                document.querySelector('#divAnimRR .node10 .svgBalFac').innerHTML = '+1';
+            }
+        })
+            .add({
+                targets: '#divAnimRR .line1',
+                translateX: 230,
+                translateY: 53,
+                x1: 0,
+                x2: 23,
+                opacity: 1,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimRR .node20',
+                translateX: 60,
+                translateY: 120,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimRR .node10 .svgBalFac, #divAnimRR .node20 .svgBalFac',
+                opacity: 1,
+                duration: 10
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Insert 30';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+        tlRR.add({
+            targets: '#divAnimRR .node30',
+            translateY: 60,
+            begin: function (anim) {
+                playBtnRR.disabled = true;
+            }
+        })
+        tlRR.add({
+            targets: '#divAnimRR .node30',
+            translateX: 60,
+            translateY: 110
+        })
+        tlRR.add({
+            targets: '#divAnimRR .node30',
+            translateX: 120,
+            translateY: 170
+        })
+            .add({
+                targets: '#divAnimRR .line2',
+                translateX: 290,
+                translateY: 103,
+                x1: 0,
+                x2: 23,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimRR .line2',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node30 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').innerHTML = '+1';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node10 .svgBalFac',
+                y: -50,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimRR .node10 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node10 .svgBalFac').classList.add('redText');
+                    document.querySelector('#divAnimRR .node10 .svgBalFac').innerHTML = '+2';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .arcLeft',
+                opacity: 1
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Rotate Left';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimRR .arcLeft',
+                opacity: 0,
+                begin: function (anim) {
+                    playBtnRR.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node10',
+                translateX: -60,
+                translateY: 120,
+                duration: 1000
+            })
+            .add({
+                targets: '#divAnimRR .line1',
+                translateX: 173,
+                translateY: 59,
+                y1: 20,
+                y2: 0,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .node20',
+                translateX: 0,
+                translateY: 70,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line2',
+                translateX: 230,
+                translateY: 53,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .node30',
+                translateX: 60,
+                translateY: 120,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line1',
+                translateX: 177,
+                translateY: 53,
+                x1: 23,
+                x2: 0,
+                y1: 0,
+                y2: 20
+            })
+            .add({
+                targets: '#divAnimRR .node10 .svgBalFac',
+                y: -52,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimRR .node10 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node10 .svgBalFac').classList.remove('redText');
+                    document.querySelector('#divAnimRR .node10 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Insert 40';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node40',
+                translateY: 60,
+                begin: function (anim) {
+                    playBtnRR.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node40',
+                translateX: 60,
+                translateY: 110
+            })
+            .add({
+                targets: '#divAnimRR .node40',
+                translateX: 120,
+                translateY: 170
+            })
+            .add({
+                targets: '#divAnimRR .line3',
+                translateX: 290,
+                translateY: 103,
+                x1: 0,
+                x2: 23,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimRR .line3',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node40 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node30 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node30 .svgBalFac').innerHTML = '+1';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').innerHTML = '+1';
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Insert 25';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node25',
+                translateY: 60,
+                begin: function (anim) {
+                    playBtnRR.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node25',
+                translateX: 60,
+                translateY: 110
+            })
+            .add({
+                targets: '#divAnimRR .node25',
+                translateX: 0,
+                translateY: 170
+            })
+            .add({
+                targets: '#divAnimRR .line4',
+                translateX: 238,
+                translateY: 103,
+                x1: 23,
+                x2: 0,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimRR .line4',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node25 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node30 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node30 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Insert 50';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node50',
+                translateY: 60,
+                begin: function (anim) {
+                    playBtnRR.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node50',
+                translateX: 60,
+                translateY: 110,
+            })
+            .add({
+                targets: '#divAnimRR .node50',
+                translateX: 120,
+                translateY: 160,
+            })
+            .add({
+                targets: '#divAnimRR .node50',
+                translateX: 180,
+                translateY: 220,
+            })
+            .add({
+                targets: '#divAnimRR .line5',
+                translateX: 350,
+                translateY: 153,
+                x1: 0,
+                x2: 23,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimRR .line5',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node50 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimRR .node40 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node40 .svgBalFac').innerHTML = '+1';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node30 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node30 .svgBalFac').innerHTML = '+1';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                y: -50,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').classList.add('redText');
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').innerHTML = '+2';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .arcLeft',
+                opacity: 1
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Rotate Left';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimRR .arcLeft',
+                opacity: 0,
+                begin: function (anim) {
+                    playBtnRR.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node10',
+                translateX: -120,
+                translateY: 170,
+                duration: 1000
+            })
+            .add({
+                targets: '#divAnimRR .line1',
+                translateX: 117,
+                translateY: 103,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .node20',
+                translateX: -60,
+                translateY: 120,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line2',
+                translateX: 173,
+                translateY: 59,
+                y1: 20,
+                y2: 0,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .node30',
+                translateX: 0,
+                translateY: 70,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line3',
+                translateX: 230,
+                translateY: 53,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .node40',
+                translateX: 60,
+                translateY: 120,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line5',
+                translateX: 290,
+                translateY: 103,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line4',
+                translateX: 170,
+                translateY: 103,
+                x1: 0,
+                x2: 23,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .node50',
+                translateX: 120,
+                translateY: 170,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimRR .line2',
+                translateX: 177,
+                translateY: 53,
+                x1: 23,
+                x2: 0,
+                y1: 0,
+                y2: 20
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                y: -52,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimRR .node20 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').classList.remove('redText');
+                    document.querySelector('#divAnimRR .node20 .svgBalFac').innerHTML = '-1';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node30 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node30 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                targets: '#divAnimRR .node40 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimRR .node40 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnRR.innerHTML = 'Reset';
+                    playBtnRR.disabled = false;
+                    tlRR.pause();
+                }
+            })
+            .add({
+                begin: function (anim) {
+                    tlRR.restart();
+                }
+            });
+    </script>
+</body>
+
+</html>

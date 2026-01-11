@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVL Tree Left-Left (LL) Rotation Animation</title>
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            margin: 20px;
+        }
+
+        .svgDataText {
+            font-family: "Roboto Mono", monospace;
+            fill: black;
+            font-size: 20px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .svgBalFac {
+            font-family: "Roboto Mono", monospace;
+            fill: black;
+            font-size: 16px;
+            opacity: 0;
+        }
+
+        .node {
+            stroke: black;
+            stroke-width: 1;
+            fill: gainsboro;
+        }
+
+        .branch {
+            stroke: black;
+            stroke-width: 1;
+            fill: black;
+        }
+
+        #arrowheadRed {
+            stroke: red;
+            fill: red;
+        }
+
+        #arrowhead line {
+            stroke: black;
+            fill: black;
+        }
+
+        .hidden-svg {
+            position: absolute;
+            left: -9999px;
+            width: 0;
+            height: 0;
+        }
+
+        .divAnim {
+            display: inline-block;
+            border: solid black 1px;
+            margin: 20px 0;
+            width: 367px;
+            max-width: 100%;
+        }
+
+        .divAnim svg {
+            width: 367px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .divAnim button {
+            display: block;
+            margin: 12px auto;
+        }
+
+        .divAnim line,
+        .divAnim .arcLeft,
+        .divAnim .arcRight {
+            opacity: 0;
+        }
+
+        .redText {
+            fill: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>The Left-Left (LL) Case</h2>
+    <p>The node where the unbalance is discovered is left heavy, and the node's left child node is also left heavy.</p>
+    <p>When this LL case happens, a single right rotation on the unbalanced node is enough to restore balance.</p>
+    <p>Step through the animation below to see the LL case, and how the balance is restored by a single right rotation.
+    </p>
+
+    <!-- SVG Definitions for arrowheads -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="hidden-svg">
+        <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="14" refX="0" refY="7" orient="auto"
+                markerUnits="userSpaceOnUse">
+                <line x1="0.5" y1="0.5" x2="7.5" y2="7.5" stroke-width="1.5"></line>
+                <line x1="0" y1="7" x2="6" y2="7" stroke-width="1"></line>
+                <line x1="0.5" y1="13.5" x2="7.5" y2="6.5" stroke-width="1.5"></line>
+            </marker>
+            <marker id="arrowheadRed" markerWidth="8" markerHeight="14" refX="0" refY="7" orient="auto"
+                markerUnits="userSpaceOnUse">
+                <line x1="0.5" y1="0.5" x2="7.5" y2="7.5" stroke-width="1.5"></line>
+                <line x1="0" y1="7" x2="6" y2="7" stroke-width="1"></line>
+                <line x1="0.5" y1="13.5" x2="7.5" y2="6.5" stroke-width="1.5"></line>
+            </marker>
+        </defs>
+    </svg>
+
+    <div id="divAnimLL" class="divAnim">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 220">
+            <path d="M 4 17 A 30 30 0 0 1 51 11" fill="none" stroke="red" stroke-width="1" class="arcRight"
+                transform="translate(188,1)" marker-end="url(#arrowheadRed)" style="opacity: 0;"></path>
+            <path d="M 56 17 A 30 30 0 0 0 9 11" fill="none" stroke="red" stroke-width="1" class="arcLeft"
+                transform="translate(187,1)" marker-end="url(#arrowheadRed)"></path>
+
+            <!-- '80' node (Q) -->
+            <g class="child leaf node80" style="transform: translateY(70px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 1;">-1</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">80</text>
+            </g>
+
+            <line x1="23" y1="0" x2="0" y2="20" class="branch line1" marker-end="url(#arrowhead)"
+                style="transform: translateX(177px) translateY(53px); opacity: 1;"></line>
+
+            <!-- '60' node (P) -->
+            <g class="root parent node60" style="transform: translateX(-60px) translateY(120px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 1;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">60</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line2" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '40' node (D) -->
+            <g class="root parent node40" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">40</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line3" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '50' node (L) -->
+            <g class="child leaf node50" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">50</text>
+            </g>
+
+            <!-- '30' node (C) -->
+            <g class="root parent node30" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">30</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line4" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line5" marker-end="url(#arrowhead)"
+                style="transform: translateX(0px) translateY(0px); opacity: 0;"></line>
+
+            <!-- '20' node (B) -->
+            <g class="root parent node20" style="transform: translateY(0px);">
+                <text x="215" y="-52" class="svgBalFac" style="opacity: 0;">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">20</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line6" marker-end="url(#arrowhead)"></line>
+
+            <!-- '70' node (K) -->
+            <g class="root parent node70">
+                <text x="215" y="-52" class="svgBalFac">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">70</text>
+            </g>
+
+            <line x1="0" y1="0" x2="23" y2="20" class="branch line7" marker-end="url(#arrowhead)"></line>
+
+            <!-- '10' node (A) -->
+            <g class="root parent node10">
+                <text x="215" y="-52" class="svgBalFac">0</text>
+                <circle cx="215" cy="-30" r="20" class="node"></circle>
+                <text x="215" y="-30" class="svgDataText">10</text>
+            </g>
+
+        </svg>
+        <button onclick="tlLL.play()">Insert 40</button>
+    </div>
+
+    <p>As you step through the animation above, two LL cases happen:</p>
+    <ol>
+        <li>When 40 is added, the balance factor of 80 becomes -2, which means the tree is unbalanced. This is an LL
+            case because both the unbalance node 80 and its left child node 60 are left heavy (negative balance
+            factors). A single right rotation at node 80 restores the tree balance.</li>
+        <li>After nodes 50, 30, and 20 are added, 60's balance factor is -2, which means the tree is out of balance.
+            This is also an LL case because both the unbalanced node 60 and its left child node 40 are left heavy. A
+            single right rotation restores the balance.</li>
+    </ol>
+
+    <!-- Anime.js library -->
+    <script src="../DSA AVL Trees_files/anime.min.js"></script>
+
+    <script>
+        // Create timeline.
+        // Put pause() after every new animation is done.
+        // Button resumes the timeline by calling tlLL.play().
+        let tlLL;
+        let playBtnLL = document.querySelector('#divAnimLL button');
+
+        tlLL = anime.timeline({
+            autoplay: true,
+            duration: 500,
+            easing: 'easeInOutCirc',
+            loop: false
+        });
+
+        tlLL.add({
+            targets: '#divAnimLL .node60 .svgBalFac, #divAnimLL .node80 .svgBalFac',
+            opacity: 1,
+            duration: 10,
+            complete: function (anim) {
+                document.querySelectorAll('#divAnimLL .svgBalFac').forEach(function (element) {
+                    element.innerHTML = '0';
+                });
+                document.querySelector('#divAnimLL .node80 .svgBalFac').innerHTML = "-1";
+            }
+        })
+            .add({
+                targets: '#divAnimLL .node80',
+                translateY: 70,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .node60',
+                translateX: -60,
+                translateY: 120,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .line1',
+                translateX: 177,
+                translateY: 53,
+                opacity: 1,
+                duration: 10,
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Insert 40';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node80 .svgBalFac',
+                duration: 10,
+                begin: function (anim) {
+                    playBtnLL.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node40',
+                translateY: 60,
+            })
+            .add({
+                targets: '#divAnimLL .node40',
+                translateX: -60,
+                translateY: 110
+            })
+            .add({
+                targets: '#divAnimLL .node40',
+                translateX: -120,
+                translateY: 170
+            })
+            .add({
+                targets: '#divAnimLL .line2',
+                x1: 23,
+                x2: 0,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .line2',
+                translateX: 119,
+                translateY: 104,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .line2',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node40 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').innerHTML = '-1';
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node80 .svgBalFac',
+                y: -50,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimLL .node80 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node80 .svgBalFac').innerHTML = '-2';
+                    document.querySelector('#divAnimLL .node80 .svgBalFac').classList.add('redText');
+                }
+            })
+            .add({
+                targets: '#divAnimLL .arcRight',
+                opacity: 1
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Rotate Right';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimLL .arcRight',
+                opacity: 0,
+                begin: function (anim) {
+                    playBtnLL.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node80',
+                translateX: 60,
+                translateY: 120,
+                duration: 1000
+            })
+            .add({
+                targets: '#divAnimLL .line1',
+                translateX: 237,
+                translateY: 58,
+                y1: 20,
+                y2: 0,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .node60',
+                translateX: 0,
+                translateY: 70,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line2',
+                translateX: 177,
+                translateY: 53,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .node40',
+                translateX: -60,
+                translateY: 120,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line1',
+                translateX: 230,
+                translateY: 53,
+                y1: 0,
+                y2: 20,
+                x1: 0,
+                x2: 23
+            })
+            .add({
+                targets: '#divAnimLL .node80 .svgBalFac',
+                y: -52,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimLL .node80 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node80 .svgBalFac').classList.remove('redText');
+                    document.querySelector('#divAnimLL .node80 .svgBalFac').innerHTML = 0;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').innerHTML = 0;
+                },
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Insert 50';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node50',
+                translateY: 60,
+                begin: function (anim) {
+                    playBtnLL.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node50',
+                translateY: 110,
+                translateX: -60
+            })
+            .add({
+                targets: '#divAnimLL .node50',
+                translateY: 170,
+                translateX: 0
+            })
+            .add({
+                targets: '#divAnimLL .line3',
+                translateX: 170,
+                translateY: 104,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .line3',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node50 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node40 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node40 .svgBalFac').innerHTML = "+1";
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').innerHTML = "-1";
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Insert 30';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node30',
+                translateY: 60,
+                begin: function (anim) {
+                    playBtnLL.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node30',
+                translateX: -60,
+                translateY: 110
+            })
+            .add({
+                targets: '#divAnimLL .node30',
+                translateX: -120,
+                translateY: 170
+            })
+            .add({
+                targets: '#divAnimLL .line4',
+                translateX: 117,
+                translateY: 103,
+                x1: 23,
+                x2: 0,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .line4',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node30 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node40 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node40 .svgBalFac').innerHTML = "0";
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Insert 20';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node20',
+                translateY: 60,
+                begin: function (anim) {
+                    playBtnLL.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node20',
+                translateX: -60,
+                translateY: 110
+            })
+            .add({
+                targets: '#divAnimLL .node20',
+                translateX: -120,
+                translateY: 160
+            })
+            .add({
+                targets: '#divAnimLL .node20',
+                translateX: -180,
+                translateY: 220
+            })
+            .add({
+                targets: '#divAnimLL .line5',
+                translateX: 57,
+                translateY: 152,
+                x1: 23,
+                x2: 0,
+                duration: 10
+            })
+            .add({
+                targets: '#divAnimLL .line5',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node20 .svgBalFac',
+                opacity: 1
+            })
+            .add({
+                targets: '#divAnimLL .node30 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node30 .svgBalFac').innerHTML = '-1';
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node40 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node40 .svgBalFac').innerHTML = '-1';
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                y: -50,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').classList.add('redText');
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').innerHTML = '-2';
+                }
+            })
+            .add({
+                targets: '#divAnimLL .arcRight',
+                opacity: 1
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Rotate Right';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                targets: '#divAnimLL .arcRight',
+                opacity: 0,
+                begin: function (anim) {
+                    playBtnLL.disabled = true;
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node80',
+                translateX: 120,
+                translateY: 170,
+                duration: 1000
+            })
+            .add({
+                targets: '#divAnimLL .line1',
+                translateX: 290,
+                translateY: 103,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .node60',
+                translateX: 60,
+                translateY: 120,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line2',
+                translateX: 238,
+                translateY: 55,
+                y1: 20,
+                y2: 0,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .node40',
+                translateX: 0,
+                translateY: 70,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line3',
+                translateX: 238,
+                x1: 23,
+                x2: 0,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line4',
+                translateX: 177,
+                translateY: 53,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .node30',
+                translateX: -60,
+                translateY: 120,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line5',
+                translateX: 117,
+                translateY: 102,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .node20',
+                translateX: -120,
+                translateY: 170,
+                duration: 1000
+            }, '-=1000')
+            .add({
+                targets: '#divAnimLL .line2',
+                translateX: 230,
+                translateY: 53,
+                y1: 0,
+                y2: 20,
+                x1: 0,
+                x2: 23
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                y: -52,
+                duration: 20
+            })
+            .add({
+                targets: '#divAnimLL .node60 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').classList.remove('redText');
+                    document.querySelector('#divAnimLL .node60 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                targets: '#divAnimLL .node40 .svgBalFac',
+                opacity: [0, 1],
+                begin: function (anim) {
+                    document.querySelector('#divAnimLL .node40 .svgBalFac').innerHTML = '0';
+                }
+            })
+            .add({
+                complete: function (anim) {
+                    playBtnLL.innerHTML = 'Reset';
+                    playBtnLL.disabled = false;
+                    tlLL.pause();
+                }
+            })
+            .add({
+                begin: function (anim) {
+                    tlLL.restart();
+                }
+            });
+    </script>
+</body>
+
+</html>

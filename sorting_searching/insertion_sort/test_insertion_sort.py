@@ -19,6 +19,10 @@ class TestInsertionSort(unittest.TestCase):
         data = [5, 1, 7, 2, 6, -3, 5, 7, -1]
         self.assertEqual(insertion_sort.sort(data), sorted(data))
 
+        print('other test cases: {}'.format(insertion_sort.sort([1, 3, 2])))
+        data1 = [5, 2, 4, 1]
+        self.assertEqual(insertion_sort.sort(data1), sorted(data1))
+
         print('Success: test_insertion_sort')
 
 

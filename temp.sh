@@ -1,0 +1,1 @@
+Phân tích độ phức tạp: Tại sao người ta nói độ phức tạp của DFS là $O(V + E)$? (V là số đỉnh, E là số cạnh).
