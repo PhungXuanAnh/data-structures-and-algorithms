@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVL Tree Left-Right Rotation Visualization</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* Vùng chứa cây */
+        .canvas {
+            position: relative;
+            width: 500px;
+            height: 400px;
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        /* SVG để vẽ đường nối */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Nằm dưới các node */
+            pointer-events: none;
+        }
+
+        line {
+            stroke: #333;
+            stroke-width: 2;
+            transition: all 0.5s ease;
+        }
+
+        /* Các Node hình tròn */
+        .node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #e0e0e0;
+            border: 2px solid #333;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 2;
+            transition: top 1s ease-in-out, left 1s ease-in-out, opacity 0.5s;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Nhãn chỉ số cân bằng (Balance Factor) - Tùy chọn hiển thị */
+        .bf {
+            position: absolute;
+            top: -20px;
+            font-size: 12px;
+            color: red;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Khu vực điều khiển */
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #status-text {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+            height: 24px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h2>AVL Tree: Left-Right Rotation (LR Case)</h2>
+    
+    <div class="canvas">
+        <svg id="lines">
+            <line id="line-30-10" x1="0" y1="0" x2="0" y2="0" />
+            <line id="line-10-20" x1="0" y1="0" x2="0" y2="0" stroke-opacity="0" />
+            <line id="line-30-20" x1="0" y1="0" x2="0" y2="0" stroke-opacity="0" />
+        </svg>
+
+        <div id="node-30" class="node" style="top: 50px; left: 225px;">
+            <span class="bf" id="bf-30">-1</span>
+            30
+        </div>
+
+        <div id="node-10" class="node" style="top: 120px; left: 125px;">
+            <span class="bf" id="bf-10">0</span>
+            10
+        </div>
+
+        <div id="node-20" class="node" style="top: 300px; left: 225px; opacity: 0;">
+            <span class="bf" id="bf-20">0</span>
+            20
+        </div>
+    </div>
+
+    <div id="status-text">Trạng thái: Ban đầu</div>
+
+    <div class="controls">
+        <button id="btn-next" onclick="nextStep()">Tiếp theo</button>
+        <button id="btn-reset" onclick="resetTree()">Làm lại</button>
+    </div>
+
+    <script>
+        // Cấu hình vị trí cho các bước
+        // Bước 0: Ban đầu
+        // Bước 1: Chèn 20 (Insert K)
+        // Bước 2: Xoay Trái (Left Rotate) tại node 10
+        // Bước 3: Xoay Phải (Right Rotate) tại node 30
+        
+        let currentStep = 0;
+        const totalSteps = 3;
+
+        const node30 = document.getElementById('node-30');
+        const node10 = document.getElementById('node-10');
+        const node20 = document.getElementById('node-20');
+        const statusText = document.getElementById('status-text');
+        const btnNext = document.getElementById('btn-next');
+
+        // Các đường nối
+        const line30_10 = document.getElementById('line-30-10');
+        const line10_20 = document.getElementById('line-10-20');
+        const line30_20 = document.getElementById('line-30-20');
+
+        function updateLines() {
+            // Hàm này cập nhật vị trí các đường nối dựa trên vị trí hiện tại của các node
+            connectNodes(node30, node10, line30_10);
+            
+            // Xử lý hiển thị đường nối tùy theo bước
+            if (currentStep >= 1 && currentStep < 3) {
+                 // Khi chưa xoay xong hoàn toàn, 10 nối với 20 hoặc 20 nối với 10
+                 line10_20.setAttribute('stroke-opacity', '1');
+                 connectNodes(node10, node20, line10_20);
+            } else if (currentStep === 3) {
+                // Kết thúc: 20 là gốc, nối với 10 và 30
+                line10_20.setAttribute('stroke-opacity', '1');
+                connectNodes(node20, node10, line10_20); // 20 nối xuống 10
+            } else {
+                line10_20.setAttribute('stroke-opacity', '0');
+            }
+
+            if (currentStep === 2) {
+                // Sau xoay trái: 30 vẫn nối 20 (20 lên làm con trái của 30)
+                line30_20.setAttribute('stroke-opacity', '1');
+                connectNodes(node30, node20, line30_10); // Dùng lại line cũ cho logic, hoặc vẽ line mới
+                // Thực tế ở bước 2: 30 nối 20, 20 nối 10.
+                // Để đơn giản visualization:
+                // Line 30-10 sẽ biến thành Line 30-20
+                connectNodes(node30, node20, line30_10);
+                connectNodes(node20, node10, line10_20);
+            } 
+            else if (currentStep === 3) {
+                // 20 nối 30
+                line30_20.setAttribute('stroke-opacity', '1');
+                connectNodes(node20, node30, line30_20);
+                // Line cũ 30-10 ẩn đi hoặc dùng cho 20-10
+                connectNodes(node20, node10, line10_20);
+                line30_10.setAttribute('stroke-opacity', '0'); // Ẩn đường nối cũ 30-10 gốc
+            } else {
+                // Bước 0 và 1: 30 nối 10
+                connectNodes(node30, node10, line30_10);
+                line30_20.setAttribute('stroke-opacity', '0');
+            }
+            
+            requestAnimationFrame(updateLines);
+        }
+
+        function connectNodes(n1, n2, line) {
+            const rect1 = n1.getBoundingClientRect();
+            const rect2 = n2.getBoundingClientRect();
+            const container = document.querySelector('.canvas').getBoundingClientRect();
+
+            // Tính tâm của node so với container
+            const x1 = rect1.left + rect1.width / 2 - container.left;
+            const y1 = rect1.top + rect1.height / 2 - container.top;
+            const x2 = rect2.left + rect2.width / 2 - container.left;
+            const y2 = rect2.top + rect2.height / 2 - container.top;
+
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+        }
+
+        function nextStep() {
+            currentStep++;
+            applyState();
+        }
+
+        function resetTree() {
+            currentStep = 0;
+            applyState();
+        }
+
+        function applyState() {
+            // Cập nhật trạng thái nút bấm
+            btnNext.disabled = (currentStep === totalSteps);
+
+            // Cập nhật Balance Factor (Text)
+            const bf30 = document.getElementById('bf-30');
+            const bf10 = document.getElementById('bf-10');
+
+            switch (currentStep) {
+                case 0: // Ban đầu
+                    statusText.innerText = "Trạng thái: Ban đầu (Cây lệch trái)";
+                    moveNode(node30, 225, 50);
+                    moveNode(node10, 125, 120);
+                    node20.style.opacity = 0;
+                    moveNode(node20, 225, 300); // Vị trí chờ
+                    
+                    bf30.innerText = "-1";
+                    bf10.innerText = "0";
+                    break;
+
+                case 1: // Insert 20
+                    statusText.innerText = "Bước 1: Chèn 20 vào nhánh phải của 10. Mất cân bằng tại 30.";
+                    node20.style.opacity = 1;
+                    moveNode(node30, 225, 50);
+                    moveNode(node10, 125, 120);
+                    moveNode(node20, 175, 200); // 20 là con phải của 10
+
+                    bf30.innerText = "-2"; // Lệch nặng
+                    bf10.innerText = "+1"; // Lệch phải
+                    break;
+
+                case 2: // Left Rotation (10-20)
+                    statusText.innerText = "Bước 2: Xoay Trái (Left Rotate) node con (10). 20 lên thay 10.";
+                    // 30 đứng yên
+                    moveNode(node30, 225, 50);
+                    // 20 lên vị trí của 10 cũ
+                    moveNode(node20, 125, 120);
+                    // 10 xuống làm con trái của 20
+                    moveNode(node10, 75, 200);
+
+                    bf30.innerText = "-2"; 
+                    bf10.innerText = "0";
+                    break;
+
+                case 3: // Right Rotation (30-20)
+                    statusText.innerText = "Bước 3: Xoay Phải (Right Rotate) node gốc (30). 20 lên làm gốc mới.";
+                    // 20 lên làm gốc
+                    moveNode(node20, 225, 50);
+                    // 10 vẫn là con trái của 20
+                    moveNode(node10, 125, 120);
+                    // 30 xuống làm con phải của 20
+                    moveNode(node30, 325, 120);
+
+                    bf30.innerText = "0";
+                    bf10.innerText = "0";
+                    document.getElementById('bf-20').innerText = "0"; // Cân bằng hoàn hảo
+                    break;
+            }
+        }
+
+        function moveNode(node, x, y) {
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+        }
+
+        // Khởi chạy vòng lặp vẽ đường
+        requestAnimationFrame(updateLines);
+
+    </script>
+</body>
+</html>

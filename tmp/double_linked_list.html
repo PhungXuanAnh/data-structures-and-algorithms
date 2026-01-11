@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubly Linked List Visualization</title>
+    <style>
+        /* Thiết lập cơ bản */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        /* Container chính chứa toàn bộ sơ đồ */
+        .linked-list-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 40px; /* Chừa chỗ cho chữ Head */
+        }
+
+        /* --- Phần HEAD --- */
+        .head-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 10px;
+            position: absolute;
+            top: -10px;
+            left: 70px;
+        }
+
+        .label {
+            color: #00b894; /* Màu xanh lá như trong ảnh */
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .head-arrow {
+            font-size: 30px;
+            color: black;
+            font-weight: bold;
+            line-height: 10px;
+        }
+
+        /* --- Phần NODE (Khối dữ liệu) --- */
+        .node {
+            display: flex;
+            border: 2px solid black;
+            background-color: white;
+            height: 50px;
+            width: 150px;
+        }
+
+        .node-part {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Phần Prev và Next (2 ô nhỏ 2 bên) */
+        .ptr {
+            width: 40px;
+            background-color: #fff;
+        }
+        
+        /* Phần Data (Ô ở giữa) */
+        .data {
+            flex-grow: 1;
+            border-left: 2px solid black;
+            border-right: 2px solid black;
+            font-size: 24px;
+            font-weight: bold;
+            color: #00b894; /* Chữ A, B, C... màu xanh */
+        }
+
+        /* --- Phần MŨI TÊN KẾT NỐI (Connectors) --- */
+        .connector {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0 10px;
+            width: 60px;
+        }
+
+        .arrow-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #00b894; /* Màu chữ Next/Prev */
+            font-weight: bold;
+            height: 20px;
+        }
+
+        /* Dòng Next (trên) */
+        .arrow-line.next {
+            margin-bottom: 5px;
+        }
+        
+        /* Dòng Prev (dưới) */
+        .arrow-line.prev {
+            margin-top: 5px;
+        }
+
+        /* Vẽ mũi tên bằng ký tự Unicode */
+        .arrow-symbol {
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* --- Phần NULL --- */
+        .null-label {
+            color: #00b894;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+
+        /* Mũi tên riêng cho NULL đầu và cuối */
+        .start-null-arrow {
+            margin-right: -5px;
+            position: relative;
+            top: 15px; /* Căn chỉnh cho khớp với ô Prev */
+        }
+        
+        .end-null-arrow {
+            margin-left: 5px;
+            position: relative;
+            top: -10px; /* Căn chỉnh cho khớp với ô Next */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="linked-list-container">
+        
+        <div class="head-wrapper">
+            <span class="label">Head</span>
+            <span class="head-arrow">↳</span>
+        </div>
+
+        <div class="null-label">NULL</div>
+        <div class="arrow-symbol start-null-arrow">←</div>
+
+        <div class="node">
+            <div class="node-part ptr"></div>
+            <div class="node-part data">A</div>
+            <div class="node-part ptr"></div>
+        </div>
+
+        <div class="connector">
+            <div class="arrow-line next">
+                <span>Next</span>
+                <span class="arrow-symbol">→</span>
+            </div>
+            <div class="arrow-line prev">
+                <span class="arrow-symbol">←</span>
+                <span>Prev</span>
+            </div>
+        </div>
+
+        <div class="node">
+            <div class="node-part ptr"></div>
+            <div class="node-part data">B</div>
+            <div class="node-part ptr"></div>
+        </div>
+
+        <div class="connector">
+            <div class="arrow-line next">
+                <span>Next</span>
+                <span class="arrow-symbol">→</span>
+            </div>
+            <div class="arrow-line prev">
+                <span class="arrow-symbol">←</span>
+                <span>Prev</span>
+            </div>
+        </div>
+
+        <div class="node">
+            <div class="node-part ptr"></div>
+            <div class="node-part data">C</div>
+            <div class="node-part ptr"></div>
+        </div>
+
+        <div class="connector">
+            <div class="arrow-line next">
+                <span>Next</span>
+                <span class="arrow-symbol">→</span>
+            </div>
+            <div class="arrow-line prev">
+                <span class="arrow-symbol">←</span>
+                <span>Prev</span>
+            </div>
+        </div>
+
+        <div class="node">
+            <div class="node-part ptr"></div>
+            <div class="node-part data">D</div>
+            <div class="node-part ptr"></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; margin-left:5px;">
+             <div class="arrow-line next" style="width: 40px;">
+                <span>Next</span>
+                <span class="arrow-symbol">→</span>
+            </div>
+        </div>
+        <div class="null-label">NULL</div>
+
+    </div>
+
+</body>
+</html>

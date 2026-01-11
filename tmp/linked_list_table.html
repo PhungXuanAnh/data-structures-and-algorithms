@@ -1,0 +1,1100 @@
+<style>
+    .ll-tables-wrapper {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f8f9fa;
+    }
+    
+    .ll-tables-wrapper * {
+        color: #2c3e50 !important;
+        opacity: 1 !important;
+    }
+    
+    .ll-tables-wrapper h1 {
+        text-align: center;
+        color: #2c3e50 !important;
+        margin-bottom: 10px;
+        font-size: 32px;
+    }
+    
+    .ll-tables-wrapper .subtitle {
+        text-align: center;
+        color: #7f8c8d !important;
+        margin-bottom: 40px;
+        font-size: 16px;
+    }
+    
+    .ll-tables-wrapper .table-section {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .ll-tables-wrapper .section-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2c3e50 !important;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #3498db;
+    }
+    
+    .ll-tables-wrapper table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+    }
+    
+    .ll-tables-wrapper th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .ll-tables-wrapper td {
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #2c3e50 !important;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    .ll-tables-wrapper tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .ll-tables-wrapper .type-name {
+        font-weight: 700;
+        color: #3498db !important;
+        font-size: 15px;
+    }
+    
+    .ll-tables-wrapper .visual-structure {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 20px 15px 30px 15px;
+        background: white;
+        border-radius: 6px;
+        margin: 8px 0;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .ll-tables-wrapper .node-visual {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+    }
+    
+    .ll-tables-wrapper .connecting-arrow {
+        color: #333 !important;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    .ll-tables-wrapper .node-box-visual {
+        display: flex;
+        flex-direction: row;
+        border: 2px solid #333;
+        border-radius: 0;
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+        overflow: visible;
+        background: white;
+        position: relative;
+    }
+    
+    .ll-tables-wrapper .node-data {
+        background: #FFD93D;
+        padding: 8px 12px;
+        color: #333 !important;
+        font-weight: bold;
+        font-size: 13px;
+        min-width: 35px;
+        text-align: center;
+        border-right: 2px solid #333;
+    }
+    
+    .ll-tables-wrapper .node-pointer {
+        background: white;
+        padding: 8px 10px;
+        color: #333 !important;
+        font-weight: normal;
+        font-size: 9px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 25px;
+    }
+    
+    .ll-tables-wrapper .node-pointer-double {
+        background: white;
+        padding: 8px 8px;
+        color: #333 !important;
+        font-weight: normal;
+        font-size: 9px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        min-width: 25px;
+    }
+    
+    .ll-tables-wrapper .node-box-visual::before {
+        content: 'Data';
+        position: absolute;
+        bottom: -18px;
+        left: 5px;
+        font-size: 9px;
+        color: #666 !important;
+        font-weight: 600;
+    }
+    
+    .ll-tables-wrapper .node-box-visual::after {
+        content: 'Next';
+        position: absolute;
+        bottom: -18px;
+        right: 5px;
+        font-size: 9px;
+        color: #666 !important;
+        font-weight: 600;
+    }
+    
+    .ll-tables-wrapper .arrow-visual {
+        color: #333 !important;
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0 5px;
+    }
+    
+    .ll-tables-wrapper .double-arrow-visual {
+        color: #333 !important;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0 5px;
+    }
+    
+    .ll-tables-wrapper .null-visual {
+        background: #e0e0e0;
+        border: 2px solid #333;
+        border-radius: 0;
+        padding: 8px 12px;
+        color: #333 !important;
+        font-weight: bold;
+        font-size: 11px;
+        min-width: 45px;
+        text-align: center;
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    }
+    
+    .ll-tables-wrapper .circular-indicator {
+        color: #e74c3c !important;
+        font-size: 18px;
+        font-weight: bold;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    .ll-tables-wrapper .skip-level {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin: 3px 0;
+    }
+    
+    .ll-tables-wrapper .skip-label {
+        font-size: 10px;
+        color: #7f8c8d !important;
+        font-weight: 600;
+        min-width: 45px;
+    }
+    
+    .ll-tables-wrapper .long-arrow {
+        color: #e74c3c !important;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .ll-tables-wrapper .structure-description {
+        font-size: 13px;
+        color: #5f6368 !important;
+        margin-top: 10px;
+        font-style: italic;
+    }
+    
+    .ll-tables-wrapper .pros {
+        color: #27ae60 !important;
+    }
+    
+    .ll-tables-wrapper .cons {
+        color: #e74c3c !important;
+    }
+    
+    .ll-tables-wrapper .complexity {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+    
+    .ll-tables-wrapper .complexity.fast {
+        background: #d5f4e6;
+        color: #27ae60 !important;
+    }
+    
+    .ll-tables-wrapper .complexity.medium {
+        background: #fff3cd;
+        color: #f39c12 !important;
+    }
+    
+    .ll-tables-wrapper .complexity.slow {
+        background: #fadbd8;
+        color: #e74c3c !important;
+    }
+    
+    .ll-tables-wrapper .winner {
+        font-weight: 700;
+        background: #d5f4e6;
+    }
+    
+    .ll-tables-wrapper .feature-icon {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+    
+    .ll-tables-wrapper .note {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #1976d2 !important;
+    }
+    
+    .ll-tables-wrapper .note strong {
+        color: #1565c0 !important;
+    }
+    
+    /* Doubly Linked List styles from double_linked_list.html */
+    .ll-tables-wrapper .dll-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 50px 15px 20px 15px;
+        background: white;
+        border-radius: 6px;
+        margin: 8px 0;
+        border: 1px solid #e0e0e0;
+    }
+
+    .ll-tables-wrapper .dll-head-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 10px;
+        position: absolute;
+        top: 5px;
+        left: 70px;
+    }
+
+    .ll-tables-wrapper .dll-label {
+        color: #00b894 !important;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .ll-tables-wrapper .dll-head-arrow {
+        font-size: 20px;
+        color: black !important;
+        font-weight: bold;
+        line-height: 10px;
+    }
+
+    .ll-tables-wrapper .dll-node {
+        display: flex;
+        border: 2px solid black;
+        background-color: white;
+        height: 35px;
+        width: 100px;
+    }
+
+    .ll-tables-wrapper .dll-node-part {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ll-tables-wrapper .dll-ptr {
+        width: 25px;
+        background-color: #fff;
+    }
+    
+    .ll-tables-wrapper .dll-data {
+        flex-grow: 1;
+        border-left: 2px solid black;
+        border-right: 2px solid black;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333 !important;
+        background-color: #FFD93D;
+    }
+
+    .ll-tables-wrapper .dll-connector {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 5px;
+        width: 40px;
+    }
+
+    .ll-tables-wrapper .dll-arrow-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        color: #00b894 !important;
+        font-weight: bold;
+        height: 14px;
+    }
+
+    .ll-tables-wrapper .dll-arrow-line.dll-next {
+        margin-bottom: 3px;
+    }
+    
+    .ll-tables-wrapper .dll-arrow-line.dll-prev {
+        margin-top: 3px;
+    }
+
+    .ll-tables-wrapper .dll-arrow-symbol {
+        color: black !important;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .ll-tables-wrapper .dll-null-label {
+        color: #00b894 !important;
+        font-weight: bold;
+        font-size: 12px;
+        margin: 0 5px;
+    }
+
+    .ll-tables-wrapper .dll-start-null-arrow {
+        margin-right: -3px;
+        position: relative;
+        top: 10px;
+    }
+
+    /* Singly Linked List styles */
+    .ll-tables-wrapper .sll-node {
+        display: flex;
+        border: 2px solid black;
+        background-color: white;
+        height: 35px;
+        width: 80px;
+    }
+
+    .ll-tables-wrapper .sll-node-small {
+        width: 55px;
+        height: 28px;
+    }
+
+    .ll-tables-wrapper .sll-node-part {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ll-tables-wrapper .sll-ptr {
+        width: 25px;
+        background-color: #fff;
+    }
+    
+    .ll-tables-wrapper .sll-data {
+        flex-grow: 1;
+        border-right: 2px solid black;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333 !important;
+        background-color: #FFD93D;
+    }
+
+    .ll-tables-wrapper .sll-node-small .sll-data {
+        font-size: 12px;
+    }
+
+    .ll-tables-wrapper .sll-connector {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 5px;
+        width: 40px;
+    }
+
+    .ll-tables-wrapper .skip-level {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin: 5px 0;
+    }
+
+    /* Circular Doubly Linked List styles */
+    .ll-tables-wrapper .cdll-diagram-container {
+        position: relative;
+        padding: 30px 15px 70px 15px;
+        background: white;
+        border-radius: 6px;
+        margin: 8px 0;
+        border: 1px solid #e0e0e0;
+    }
+
+    .ll-tables-wrapper .cdll-label-head {
+        position: absolute;
+        top: 5px;
+        left: 0;
+        width: 70px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        color: #00b894 !important;
+    }
+
+    .ll-tables-wrapper .cdll-nodes-wrapper {
+        display: flex;
+        gap: 30px;
+    }
+
+    .ll-tables-wrapper .cdll-node {
+        display: flex;
+        width: 70px;
+        height: 35px;
+        border: 1px solid black;
+        background-color: white;
+        z-index: 2;
+        position: relative;
+    }
+
+    .ll-tables-wrapper .cdll-data-part,
+    .ll-tables-wrapper .cdll-pointer-part {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ll-tables-wrapper .cdll-data-part {
+        border-right: 1px solid black;
+        font-weight: bold;
+        background-color: #FFD93D;
+        color: #333 !important;
+    }
+
+    .ll-tables-wrapper .cdll-dot {
+        height: 6px;
+        width: 6px;
+        background-color: black;
+        border-radius: 50%;
+    }
+
+    .ll-tables-wrapper .cdll-arrows-layer {
+        position: absolute;
+        top: 30px;
+        left: 15px;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+    }
+
+    /* Circular Doubly Linked List v2 styles */
+    .ll-tables-wrapper .cdll2-diagram-container {
+        position: relative;
+        padding: 50px 30px 70px 30px;
+        background: white;
+        border-radius: 6px;
+        margin: 8px 0;
+        border: 1px solid #e0e0e0;
+    }
+
+    .ll-tables-wrapper .cdll2-label-head {
+        position: absolute;
+        top: 5px;
+        left: 30px;
+        width: 90px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        color: #00b894 !important;
+    }
+
+    .ll-tables-wrapper .cdll2-nodes-wrapper {
+        display: flex;
+        gap: 40px;
+    }
+
+    .ll-tables-wrapper .cdll2-node {
+        display: flex;
+        width: 90px;
+        height: 40px;
+        border: 1px solid black;
+        background-color: white;
+        position: relative;
+        z-index: 2;
+    }
+
+    .ll-tables-wrapper .cdll2-node-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-right: 1px solid black;
+    }
+
+    .ll-tables-wrapper .cdll2-ptr-section {
+        width: 25px;
+    }
+
+    .ll-tables-wrapper .cdll2-data-section {
+        flex: 1;
+        font-weight: bold;
+        font-size: 14px;
+        background-color: #FFD93D;
+        color: #333 !important;
+    }
+
+    .ll-tables-wrapper .cdll2-node-section:last-child {
+        border-right: none;
+    }
+
+    .ll-tables-wrapper .cdll2-dot {
+        height: 5px;
+        width: 5px;
+        background-color: black;
+        border-radius: 50%;
+    }
+
+    .ll-tables-wrapper .cdll2-arrows-layer {
+        position: absolute;
+        top: 50px;
+        left: 30px;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+    }
+</style>
+
+<div class="ll-tables-wrapper">
+    <h1>📊 Linked List Reference Tables</h1>
+    <p class="subtitle">Comprehensive comparison of linked list types and arrays</p>
+    
+    <!-- Table 1: Types of Linked Lists -->
+    <div class="table-section">
+        <h2 class="section-title">🔗 Types of Linked Lists</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%">Type</th>
+                    <th style="width: 25%">Structure</th>
+                    <th style="width: 27%">Advantages</th>
+                    <th style="width: 28%">Disadvantages</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="type-name">Singly Linked List</td>
+                    <td>
+                        <div class="dll-container">
+                            <div class="dll-head-wrapper" style="left: -20px; top: 38px;">
+                                <span class="dll-label">Head</span>
+                                <span class="dll-head-arrow">↳</span>
+                            </div>
+
+                            <div class="sll-node">
+                                <div class="sll-node-part sll-data">A</div>
+                                <div class="sll-node-part sll-ptr"></div>
+                            </div>
+
+                            <div class="sll-connector">
+                                <div class="dll-arrow-line dll-next">
+                                    <span>Next</span>
+                                    <span class="dll-arrow-symbol">→</span>
+                                </div>
+                            </div>
+
+                            <div class="sll-node">
+                                <div class="sll-node-part sll-data">B</div>
+                                <div class="sll-node-part sll-ptr"></div>
+                            </div>
+
+                            <div class="sll-connector">
+                                <div class="dll-arrow-line dll-next">
+                                    <span>Next</span>
+                                    <span class="dll-arrow-symbol">→</span>
+                                </div>
+                            </div>
+
+                            <div class="sll-node">
+                                <div class="sll-node-part sll-data">C</div>
+                                <div class="sll-node-part sll-ptr"></div>
+                            </div>
+
+                            <div class="sll-connector">
+                                <div class="dll-arrow-line dll-next">
+                                    <span>Next</span>
+                                    <span class="dll-arrow-symbol">→</span>
+                                </div>
+                            </div>
+
+                            <div class="dll-null-label">NULL</div>
+                        </div>
+                        <div class="structure-description">Each node: [Data | Next] with forward pointer only</div>
+                    </td>
+                    <td class="pros">
+                        • Simple implementation<br>
+                        • Less memory per node<br>
+                        • Fast insertion at head O(1)<br>
+                        • Efficient forward traversal
+                    </td>
+                    <td class="cons">
+                        • No backward traversal<br>
+                        • Deletion requires previous node<br>
+                        • Cannot go back easily
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="type-name">Doubly Linked List</td>
+                    <td>
+                        <div class="dll-container">
+                            <div class="dll-head-wrapper" style="left: 33px; top: 26px;">
+                                <span class="dll-label">Head</span>
+                                <span class="dll-head-arrow">↳</span>
+                            </div>
+
+                            <div class="dll-null-label" style="margin-top: 24px;">NULL</div>
+                            <div class="dll-arrow-symbol dll-start-null-arrow">←</div>
+
+                            <div class="dll-node">
+                                <div class="dll-node-part dll-ptr"></div>
+                                <div class="dll-node-part dll-data">A</div>
+                                <div class="dll-node-part dll-ptr"></div>
+                            </div>
+
+                            <div class="dll-connector">
+                                <div class="dll-arrow-line dll-next">
+                                    <span>Next</span>
+                                    <span class="dll-arrow-symbol">→</span>
+                                </div>
+                                <div class="dll-arrow-line dll-prev">
+                                    <span class="dll-arrow-symbol">←</span>
+                                    <span>Prev</span>
+                                </div>
+                            </div>
+
+                            <div class="dll-node">
+                                <div class="dll-node-part dll-ptr"></div>
+                                <div class="dll-node-part dll-data">B</div>
+                                <div class="dll-node-part dll-ptr"></div>
+                            </div>
+
+                            <div class="dll-connector">
+                                <div class="dll-arrow-line dll-next">
+                                    <span>Next</span>
+                                    <span class="dll-arrow-symbol">→</span>
+                                </div>
+                                <div class="dll-arrow-line dll-prev">
+                                    <span class="dll-arrow-symbol">←</span>
+                                    <span>Prev</span>
+                                </div>
+                            </div>
+
+                            <div class="dll-node">
+                                <div class="dll-node-part dll-ptr"></div>
+                                <div class="dll-node-part dll-data">C</div>
+                                <div class="dll-node-part dll-ptr"></div>
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; margin-left:5px;">
+                                <div class="dll-arrow-line dll-next" style="width: 40px;">
+                                    <span>Next</span>
+                                    <span class="dll-arrow-symbol">→</span>
+                                </div>
+                            </div>
+                            <div class="dll-null-label">NULL</div>
+                        </div>
+                        <div class="structure-description">Each node: [Prev | Data | Next] with bidirectional pointers</div>
+                    </td>
+                    <td class="pros">
+                        • Bidirectional traversal<br>
+                        • Easier deletion (no need to track prev)<br>
+                        • Better for certain algorithms<br>
+                        • Can traverse backward
+                    </td>
+                    <td class="cons">
+                        • More memory (2 pointers)<br>
+                        • More complex implementation<br>
+                        • Extra overhead for updates
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="type-name">Circular Linked List</td>
+                    <td>
+                        <div class="cdll-diagram-container">
+                            <div class="cdll-label-head">Head</div>
+                            <div class="cdll-nodes-wrapper">
+                                <div class="cdll-node">
+                                    <div class="cdll-data-part">A</div>
+                                    <div class="cdll-pointer-part"><div class="cdll-dot"></div></div>
+                                </div>
+                                <div class="cdll-node">
+                                    <div class="cdll-data-part">B</div>
+                                    <div class="cdll-pointer-part"><div class="cdll-dot"></div></div>
+                                </div>
+                                <div class="cdll-node">
+                                    <div class="cdll-data-part">C</div>
+                                    <div class="cdll-pointer-part"><div class="cdll-dot"></div></div>
+                                </div>
+                            </div>
+                            <svg class="cdll-arrows-layer">
+                                <defs>
+                                    <marker id="cdll-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+                                    </marker>
+                                </defs>
+                                <!-- Forward arrows -->
+                                <line x1="70" y1="18" x2="100" y2="18" stroke="black" stroke-width="1.5" marker-end="url(#cdll-arrowhead)" />
+                                <line x1="170" y1="18" x2="200" y2="18" stroke="black" stroke-width="1.5" marker-end="url(#cdll-arrowhead)" />
+                                <!-- Circular arrow (last to first) -->
+                                <polyline points="270,18 290,18 290,55 -20,55 -20,18 0,18" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#cdll-arrowhead)" />
+                            </svg>
+                        </div>
+                        <div class="structure-description">Each node: [Data | Next] - last node points back to first</div>
+                    </td>
+                    <td class="pros">
+                        • No NULL pointers to check<br>
+                        • Useful for round-robin<br>
+                        • Can traverse entire list from any node<br>
+                        • Great for cyclic processes
+                    </td>
+                    <td class="cons">
+                        • Must track termination carefully<br>
+                        • Risk of infinite loops<br>
+                        • Slightly harder to implement<br>
+                        • Finding end is O(n)
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="type-name">Circular Doubly Linked List</td>
+                    <td>
+                        <div class="cdll2-diagram-container">
+                            <div class="cdll2-label-head">Head</div>
+                            <div class="cdll2-nodes-wrapper">
+                                <div class="cdll2-node">
+                                    <div class="cdll2-node-section cdll2-ptr-section"><div class="cdll2-dot"></div></div>
+                                    <div class="cdll2-node-section cdll2-data-section">A</div>
+                                    <div class="cdll2-node-section cdll2-ptr-section"><div class="cdll2-dot"></div></div>
+                                </div>
+                                <div class="cdll2-node">
+                                    <div class="cdll2-node-section cdll2-ptr-section"><div class="cdll2-dot"></div></div>
+                                    <div class="cdll2-node-section cdll2-data-section">B</div>
+                                    <div class="cdll2-node-section cdll2-ptr-section"><div class="cdll2-dot"></div></div>
+                                </div>
+                                <div class="cdll2-node">
+                                    <div class="cdll2-node-section cdll2-ptr-section"><div class="cdll2-dot"></div></div>
+                                    <div class="cdll2-node-section cdll2-data-section">C</div>
+                                    <div class="cdll2-node-section cdll2-ptr-section"><div class="cdll2-dot"></div></div>
+                                </div>
+                            </div>
+                            <svg class="cdll2-arrows-layer">
+                                <defs>
+                                    <marker id="cdll2-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+                                    </marker>
+                                </defs>
+                                <!-- Forward arrows between nodes -->
+                                <line x1="90" y1="12" x2="130" y2="12" stroke="black" stroke-width="1.5" marker-end="url(#cdll2-arrowhead)" />
+                                <line x1="130" y1="28" x2="90" y2="28" stroke="black" stroke-width="1.5" marker-end="url(#cdll2-arrowhead)" />
+                                <line x1="220" y1="12" x2="260" y2="12" stroke="black" stroke-width="1.5" marker-end="url(#cdll2-arrowhead)" />
+                                <line x1="260" y1="28" x2="220" y2="28" stroke="black" stroke-width="1.5" marker-end="url(#cdll2-arrowhead)" />
+                                <!-- Circular arrows (last to first and first to last) -->
+                                <polyline points="350,28 370,28 370,60 -20,60 -20,28 0,28" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#cdll2-arrowhead)" />
+                                <polyline points="0,12 -20,12 -20,-20 370,-20 370,12 350,12" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#cdll2-arrowhead)" />
+                            </svg>
+                        </div>
+                        <div class="structure-description">Each node: [Prev | Data | Next] - circular bidirectional connections</div>
+                    </td>
+                    <td class="pros">
+                        • All benefits of doubly linked<br>
+                        • All benefits of circular<br>
+                        • Maximum flexibility<br>
+                        • Optimal for complex operations
+                    </td>
+                    <td class="cons">
+                        • Most memory overhead<br>
+                        • Most complex to implement<br>
+                        • Highest maintenance cost<br>
+                        • Overkill for simple tasks
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="type-name">Skip List</td>
+                    <td>
+                        <div class="dll-container" style="flex-direction: column; align-items: flex-start; padding: 20px 15px;">
+                            <div class="skip-level">
+                                <span class="dll-label" style="min-width: 50px; font-size: 11px;">Level 2:</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">1</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol" style="color: #e74c3c !important;">━━━→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">5</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                            </div>
+                            <div class="skip-level">
+                                <span class="dll-label" style="min-width: 50px; font-size: 11px;">Level 1:</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">1</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">3</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">5</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">7</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                            </div>
+                            <div class="skip-level">
+                                <span class="dll-label" style="min-width: 50px; font-size: 11px;">Level 0:</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">1</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">2</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">3</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">4</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                                <span class="dll-arrow-symbol">→</span>
+                                <div class="sll-node sll-node-small">
+                                    <div class="sll-node-part sll-data">5</div>
+                                    <div class="sll-node-part sll-ptr"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="structure-description">Each node: [Data | Next] with multiple level pointers</div>
+                    </td>
+                    <td class="pros">
+                        • Fast search O(log n) average<br>
+                        • Fast insertion/deletion<br>
+                        • No rebalancing needed<br>
+                        • Simpler than balanced trees
+                    </td>
+                    <td class="cons">
+                        • More memory for levels<br>
+                        • Probabilistic structure<br>
+                        • Not deterministic O(log n)<br>
+                        • Complex implementation
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="note">
+            <strong>💡 Choosing the Right Type:</strong> Use singly linked for simple forward-only operations, doubly linked when you need backward traversal, circular for cyclic algorithms (schedulers, games), and skip lists when you need fast search in a linked structure.
+        </div>
+    </div>
+    
+    <!-- Table 2: Linked List vs Array -->
+    <div class="table-section">
+        <h2 class="section-title">⚔️ Linked List vs Array Comparison</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%">Feature</th>
+                    <th style="width: 37%">Array</th>
+                    <th style="width: 38%">Linked List</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="feature-icon">💾</span><strong>Memory Allocation</strong></td>
+                    <td>Contiguous memory block allocated at creation</td>
+                    <td>Scattered memory locations, allocated as needed</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">📏</span><strong>Size</strong></td>
+                    <td class="winner">Fixed size (static) or requires resizing (dynamic)</td>
+                    <td class="winner">Dynamic size, grows/shrinks easily</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">🎯</span><strong>Access Time</strong></td>
+                    <td class="winner"><span class="complexity fast">O(1)</span> Direct index access</td>
+                    <td><span class="complexity slow">O(n)</span> Must traverse from head</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">🔍</span><strong>Search</strong></td>
+                    <td><span class="complexity slow">O(n)</span> Linear search<br><span class="complexity medium">O(log n)</span> if sorted (binary search)</td>
+                    <td><span class="complexity slow">O(n)</span> Must traverse sequentially</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">➕</span><strong>Insert at Beginning</strong></td>
+                    <td><span class="complexity slow">O(n)</span> Must shift all elements</td>
+                    <td class="winner"><span class="complexity fast">O(1)</span> Just update head pointer</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">➕</span><strong>Insert at End</strong></td>
+                    <td class="winner"><span class="complexity fast">O(1)</span> if space available</td>
+                    <td><span class="complexity slow">O(n)</span> or <span class="complexity fast">O(1)</span> with tail pointer</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">➕</span><strong>Insert at Position</strong></td>
+                    <td><span class="complexity slow">O(n)</span> Must shift elements</td>
+                    <td><span class="complexity slow">O(n)</span> Must traverse to position</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">➖</span><strong>Delete at Beginning</strong></td>
+                    <td><span class="complexity slow">O(n)</span> Must shift all elements</td>
+                    <td class="winner"><span class="complexity fast">O(1)</span> Update head pointer</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">➖</span><strong>Delete at End</strong></td>
+                    <td class="winner"><span class="complexity fast">O(1)</span> Direct access</td>
+                    <td><span class="complexity slow">O(n)</span> Must traverse to find second-to-last</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">💰</span><strong>Memory Overhead</strong></td>
+                    <td class="winner">No extra space (just the elements)</td>
+                    <td>Extra space for pointer(s) in each node</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">📦</span><strong>Memory Waste</strong></td>
+                    <td>Can waste space if array over-allocated</td>
+                    <td class="winner">No wasted space, exact size needed</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">⚡</span><strong>Cache Performance</strong></td>
+                    <td class="winner">Excellent (spatial locality)</td>
+                    <td>Poor (scattered memory locations)</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">🔄</span><strong>Resizing</strong></td>
+                    <td>Expensive: O(n) to create new array and copy</td>
+                    <td class="winner">Easy: just add/remove nodes</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">🎨</span><strong>Implementation</strong></td>
+                    <td class="winner">Simple, built-in to most languages</td>
+                    <td>More complex, often need custom implementation</td>
+                </tr>
+                
+                <tr>
+                    <td><span class="feature-icon">🔢</span><strong>Use Cases</strong></td>
+                    <td>
+                        • Frequent access by index<br>
+                        • Fixed/predictable size<br>
+                        • Sorting algorithms<br>
+                        • Lookup tables<br>
+                        • Image/matrix operations
+                    </td>
+                    <td>
+                        • Frequent insertions/deletions<br>
+                        • Unknown size<br>
+                        • Implementing stacks/queues<br>
+                        • Undo functionality<br>
+                        • Memory-constrained systems
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="note">
+            <strong>🎯 Quick Decision Guide:</strong> Choose arrays when you need fast random access and know the size. Choose linked lists when you need frequent insertions/deletions at the beginning or when size is unpredictable. For most general purposes with modern hardware, arrays often perform better due to cache efficiency.
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // Add smooth scroll behavior
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+    
+    // Add hover effect to table rows
+    const rows = document.querySelectorAll('.ll-tables-wrapper tbody tr');
+    rows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.01)';
+            this.style.transition = 'transform 0.2s ease';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+})();
+</script>

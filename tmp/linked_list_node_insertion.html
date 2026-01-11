@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Linked List Insertion</title>
+    <style>
+        /* --- CSS STYLES --- */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .list-container {
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 80%;
+            max-width: 900px;
+        }
+
+        /* Instructions & Controls */
+        #step-description {
+            height: 50px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        #next-step-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        #next-step-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #reset-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        #reset-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        /* Nodes and Wrapper */
+        .nodes-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+            min-height: 100px; /* Ensure space for vertical arrangement */
+            position: relative;
+            height: 166px;
+        }
+
+        .node {
+            width: 120px;
+            height: 60px;
+            display: flex;
+            border: 2px solid #333;
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            background-color: #e0f7fa;
+            position: relative;
+            transition: all 0.5s ease-in-out, background-color 0.5s;
+        }
+
+        /* Individual parts of the node */
+        .data {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            border-right: 1px dashed #333;
+        }
+
+        .pointer {
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            background-color: #b2ebf2;
+        }
+
+        /* State Classes */
+        .new-node {
+            background-color: #ffcdd2;
+            border-color: #f44336;
+            box-shadow: 0 0 10px #f44336;
+            /* Initially hidden or positioned */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .new-node .pointer {
+            background-color: #ef9a9a;
+        }
+
+        .highlight-action {
+            animation: highlight 1s ease-in-out 1;
+        }
+
+        @keyframes highlight {
+            0% { transform: scale(1.0); box-shadow: 0 0 15px 3px orange; }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px 5px orange; }
+            100% { transform: scale(1.0); box-shadow: none; }
+        }
+
+
+        /* Arrow styling using CSS line with arrowhead */
+        .arrow {
+            display: flex;
+            align-items: center;
+            width: 400px;
+            height: 4px;
+            background-color: #333;
+            margin: 0 10px;
+            position: relative;
+            transition: opacity 0.3s;
+            opacity: 1;
+        }
+        
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            border: 8px solid transparent;
+            border-left: 12px solid #333;
+        }
+        .hidden-arrow {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Labels */
+        .node::before {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        #prev-node::before { content: "prev_node"; color: #00796b; }
+        #new-node::before { content: "new_node"; color: #d32f2f; }
+        #next-node::before { content: "next_node"; color: #00796b; }
+
+        /* The actual pointer lines using SVG for precise dynamic drawing */
+        .svg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .pointer-line {
+            stroke-width: 4;
+            stroke-dasharray: 0;
+            transition: stroke-dasharray 1s ease-in-out, opacity 0.5s;
+        }
+
+        .new-link {
+            stroke: #f44336; /* Red for the new link */
+        }
+
+        .temp-link {
+            stroke: orange; /* Orange for the temporary link */
+            stroke-dasharray: 5 5;
+        }
+        .old-link {
+             stroke: #999; /* Grey for the link being replaced */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="list-container">
+        <h1>Linked List Insertion (Interactive)</h1>
+
+        <div class="controls">
+            <div id="step-description">Click "Next Step" to begin the visualization.</div>
+            <button id="prev-step-btn" disabled>Previous</button>
+            <button id="next-step-btn">Next Step (1/4)</button>
+            <button id="reset-btn" disabled>Reset</button>
+        </div>
+
+        <div class="nodes-wrapper">
+            
+            <svg class="svg-container"></svg>
+
+            <div class="node" id="prev-node">
+                <div class="data">A</div>
+                <div class="pointer">next</div>
+            </div>
+            <div class="arrow" id="arrow-1"></div>
+            <div class="node" id="next-node">
+                <div class="data">B</div>
+                <div class="pointer">NULL</div>
+            </div>
+            
+            <div class="node new-node" id="new-node" style="position: absolute; top: 120px;">
+                <div class="data">X</div>
+                <div class="pointer">next</div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT LOGIC ---
+        const STEP_COUNT = 4;
+        let currentStep = 0;
+
+        const descriptionElement = document.getElementById('step-description');
+        const prevButton = document.getElementById('prev-step-btn');
+        const nextButton = document.getElementById('next-step-btn');
+        const resetButton = document.getElementById('reset-btn');
+        
+        const prevNode = document.getElementById('prev-node');
+        const newNode = document.getElementById('new-node');
+        const nextNode = document.getElementById('next-node');
+        
+        const svgContainer = document.querySelector('.svg-container');
+        
+        // Helper function to get coordinates of the pointer (right edge of the node)
+        function getPointerCoords(node) {
+            const rect = node.getBoundingClientRect();
+            const wrapperRect = node.parentElement.getBoundingClientRect();
+            
+            // Calculate coordinates relative to the nodes-wrapper (SVG container)
+            return {
+                x: rect.right - wrapperRect.left, // Right side of the node
+                y: rect.top + rect.height / 2 - wrapperRect.top // Middle vertical
+            };
+        }
+        
+        // Helper function to draw an SVG line
+        function drawLine(startNode, endNode, className, id) {
+            // Wait for the next frame to ensure element positions are updated
+            requestAnimationFrame(() => {
+                const start = getPointerCoords(startNode);
+                const end = getPointerCoords(endNode);
+
+                // Check if line element already exists
+                let line = document.getElementById(id);
+                if (!line) {
+                    line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('id', id);
+                    line.setAttribute('class', `pointer-line ${className}`);
+                    svgContainer.appendChild(line);
+                }
+
+                line.setAttribute('x1', start.x);
+                line.setAttribute('y1', start.y);
+                line.setAttribute('x2', end.x);
+                line.setAttribute('y2', end.y);
+            });
+        }
+        
+        // Helper function to remove a line
+        function removeLine(id) {
+            const line = document.getElementById(id);
+            if (line) {
+                line.remove();
+            }
+        }
+        
+        // --- STEP DEFINITIONS ---
+        function executeStep() {
+            currentStep++;
+            nextButton.textContent = `Next Step (${currentStep + 1}/${STEP_COUNT})`;
+            resetButton.disabled = false;
+            
+            switch (currentStep) {
+                case 1:
+                    // Step 1: Create the New Node
+                    descriptionElement.innerHTML = "<strong>Step 1: Create the New Node.</strong> The new node is created and its data ('X') is assigned. Its next pointer is initially irrelevant (or NULL).";
+                    
+                    newNode.style.opacity = 1;
+                    newNode.style.transform = 'translateY(0)';
+                    newNode.classList.add('highlight-action');
+
+                    // Draw initial link: prev -> next
+                    drawLine(prevNode, nextNode, 'old-link', 'link-old');
+                    document.getElementById('arrow-1').style.opacity = 0;
+                    
+                    prevButton.disabled = false;
+
+                    break;
+
+                case 2:
+                    // Step 2: Link the New Node to the Node After It
+                    descriptionElement.innerHTML = "<strong>Step 2: <span style='color:#d32f2f'>new_node</span>.next = prev_node.next.</strong> The <span style='color:#d32f2f'>new node</span>'s 'next' pointer is set to point to the node currently after the 'prev_node' (Node B).";
+                    newNode.classList.remove('highlight-action');
+                    
+                    // Draw temporary link: new -> next (Highlighted orange)
+                    drawLine(newNode, nextNode, 'temp-link', 'link-temp');
+                    
+                    break;
+
+                case 3:
+                    // Step 3: Link the Node Before to the New Node
+                    descriptionElement.innerHTML = "<strong>Step 3: prev_node.next = <span style='color:#d32f2f'>new_node</span>.</strong> The 'prev_node's 'next' pointer is updated to point to the '<span style='color:#d32f2f'>new_node</span>'. The old link is broken.";
+                    prevNode.classList.add('highlight-action');
+                    
+                    // Remove old link: prev -> next
+                    removeLine('link-old');
+                    
+                    // Draw final link: prev -> new (Green)
+                    drawLine(prevNode, newNode, 'new-link', 'link-final-1');
+
+                    break;
+
+                case 4:
+                    // Final State
+                    descriptionElement.innerHTML = "<strong>Insertion Complete!</strong> The linked list sequence is now: [A] → [X] → [B]. The temporary link (X → B) becomes the final link in the sequence.";
+                    prevNode.classList.remove('highlight-action');
+                    
+                    // The temporary link (new -> next) is now the permanent second link
+                    document.getElementById('link-temp').classList.remove('temp-link');
+                    document.getElementById('link-temp').classList.add('new-link');
+                    
+                    nextButton.disabled = true;
+                    nextButton.textContent = 'Finished';
+
+                    break;
+            }
+        }
+        
+        function resetVisualization() {
+            currentStep = 0;
+            descriptionElement.innerHTML = "Click \"Next Step\" to begin the visualization.";
+            nextButton.textContent = `Next Step (1/${STEP_COUNT})`;
+            nextButton.disabled = false;
+            resetButton.disabled = true;
+            prevButton.disabled = true;
+
+            // Reset node styles
+            newNode.style.opacity = 0;
+            newNode.style.transform = 'translateY(120px)';
+            newNode.classList.remove('highlight-action');
+            prevNode.classList.remove('highlight-action');
+            
+            // Remove all SVG lines
+            svgContainer.innerHTML = '';
+            document.getElementById('arrow-1').style.opacity = 1;
+        }
+
+        function goToPreviousStep() {
+            if (currentStep <= 0) return;
+            
+            // Reset to beginning and replay up to currentStep - 1
+            const targetStep = currentStep - 1;
+            resetVisualization();
+            
+            for (let i = 0; i < targetStep; i++) {
+                executeStepSilent(i + 1);
+            }
+            
+            currentStep = targetStep;
+            updateButtonStates();
+        }
+        
+        function executeStepSilent(step) {
+            // Execute step without animation for replay
+            switch (step) {
+                case 1:
+                    newNode.style.opacity = 1;
+                    newNode.style.transform = 'translateY(0)';
+                    drawLine(prevNode, nextNode, 'old-link', 'link-old');
+                    document.getElementById('arrow-1').style.opacity = 0;
+                    descriptionElement.innerHTML = "<strong>Step 1: Create the New Node.</strong> The new node is created and its data ('X') is assigned. Its next pointer is initially irrelevant (or NULL).";
+                    break;
+                case 2:
+                    newNode.style.opacity = 1;
+                    newNode.style.transform = 'translateY(0)';
+                    drawLine(prevNode, nextNode, 'old-link', 'link-old');
+                    document.getElementById('arrow-1').style.opacity = 0;
+                    drawLine(newNode, nextNode, 'temp-link', 'link-temp');
+                    descriptionElement.innerHTML = "<strong>Step 2: <span style='color:#d32f2f'>new_node</span>.next = prev_node.next.</strong> The <span style='color:#d32f2f'>new node</span>'s 'next' pointer is set to point to the node currently after the 'prev_node' (Node B).";
+                    break;
+                case 3:
+                    newNode.style.opacity = 1;
+                    newNode.style.transform = 'translateY(0)';
+                    document.getElementById('arrow-1').style.opacity = 0;
+                    drawLine(newNode, nextNode, 'temp-link', 'link-temp');
+                    drawLine(prevNode, newNode, 'new-link', 'link-final-1');
+                    descriptionElement.innerHTML = "<strong>Step 3: prev_node.next = <span style='color:#d32f2f'>new_node</span>.</strong> The 'prev_node's 'next' pointer is updated to point to the '<span style='color:#d32f2f'>new_node</span>'. The old link is broken.";
+                    break;
+                case 4:
+                    newNode.style.opacity = 1;
+                    newNode.style.transform = 'translateY(0)';
+                    document.getElementById('arrow-1').style.opacity = 0;
+                    drawLine(newNode, nextNode, 'new-link', 'link-temp');
+                    drawLine(prevNode, newNode, 'new-link', 'link-final-1');
+                    descriptionElement.innerHTML = "<strong>Insertion Complete!</strong> The linked list sequence is now: [A] → [X] → [B]. The temporary link (X → B) becomes the final link in the sequence.";
+                    break;
+            }
+        }
+        
+        function updateButtonStates() {
+            prevButton.disabled = currentStep <= 0;
+            nextButton.disabled = currentStep >= STEP_COUNT;
+            resetButton.disabled = currentStep <= 0;
+            
+            if (currentStep >= STEP_COUNT) {
+                nextButton.textContent = 'Finished';
+            } else {
+                nextButton.textContent = `Next Step (${currentStep + 1}/${STEP_COUNT})`;
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        nextButton.addEventListener('click', executeStep);
+        prevButton.addEventListener('click', goToPreviousStep);
+        resetButton.addEventListener('click', resetVisualization);
+        
+        // Initial setup
+        window.onload = resetVisualization;
+    </script>
+</body>
+</html>
